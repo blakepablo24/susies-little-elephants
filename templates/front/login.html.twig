@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block menu %}
+{% endblock %}
+
+{% block main %}
+
+    <main>
+
+        {% if error %}
+
+            
+
+            <div class="form-errors">
+            
+                {{error.messageKey|trans(error.messageData, 'security')}}
+                
+            </div>
+
+            
+        
+        {% endif %}
+        
+    
+        <form class="edit-family-form" method="POST" action="{{path('login')}}">
+
+            <h3>Please Login</h3>
+            <input class="edit-family-form-field" name="_email" type="text" placeholder="username">
+            <input class="edit-family-form-field" name="_password" type="password" placeholder="password">
+            <div>
+                <label>
+                    <input name="_remember_me" type="checkbox">    
+                    Remember me
+                </label>
+            </div>
+            <button class="edit-family-form-button" type="submit">Login</button>
+            <input name="_csrf_token" type="hidden" value="{{csrf_token('authenticate')}}">
+        </form>
+    
+    </main>
+
+{% endblock %}
+
+{% block footer %}
+{% endblock %}

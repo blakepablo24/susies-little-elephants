@@ -1,0 +1,9 @@
+{
+  "entrypoints": {
+    "css/styles": {
+      "css": [
+        "/assets/css/styles.css"
+      ]
+    }
+  }
+}

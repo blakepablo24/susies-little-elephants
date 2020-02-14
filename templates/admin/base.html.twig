@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    
+    <!-- Local style sheet -->
+    <link rel="stylesheet" href="{{asset('assets/css/styles.css')}}">
+
+    <!-- Google Fonts -->
+    <link href="{{asset('https://fonts.googleapis.com/css?family=Arimo|Montserrat&display=swap')}}" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{{asset('https://use.fontawesome.com/releases/v5.8.1/css/all.css')}}" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
+    {# Custom styles if needed #}
+    {% block customstylesheets %}
+    {% endblock %}
+
+    <title>{% block title %}Susie's little elephants{% endblock %}</title>
+    
+</head>
+
+    <body>
+        {% block header %}{% endblock %}
+
+        {% block menu %}
+            <header>
+
+                <img width="" src="" alt="">
+
+            {% if not is_granted('ROLE_ADMIN') %}
+
+                <div class="title"><h3>The {{app.user.lastname}} Family Portal</h3></div>
+
+            {% else %}
+
+                <div class="title"><h3>{{app.user.name}}'s Admin</h3></div>
+                
+            {% endif %}
+
+                <img width="85%" src="{{asset('assets/img/front-page-images/ofsted-logo.png')}}" alt="">
+
+            </header>
+            <nav>
+                <div onclick="openBurgerMenu()" class="burger-menu-container">
+                    <i class="fas fa-bars fa-2x"></i>
+                </div>
+                <div>
+                    {% if not is_granted('ROLE_ADMIN') %}
+
+                        <a class="login-container" href="{{path('admin_main_page')}}"><i class="fas fa-home"></i><h4>My Family</h4></a>
+
+                    {% else %}
+
+                        <a class="login-container" href="{{path('admin_main_page')}}"><i class="fas fa-home"></i><h4>My Families</h4></a>
+
+                    {% endif %}
+                </div>
+                <div>
+                    <a class="login-container" href="{{path('logout')}}"><i class="fas fa-user-alt"></i><h4>Logout {{app.user.name}}</h4></a>
+
+                </div>
+            </nav>
+            <div id="burger-menu" class="burger-navigation-menu-container">
+                <div class="burger-navigation-menu">
+                    <a href="javascript:void(0)" class="closebtn" onclick="closeBurgerMenu()"><i class="fas fa-times fa-2x"></i></a>
+                    <div class="burger-menu-items-container">
+                        <a href="{{path('main_page')}}" class="burger-menu-item"><h3>Home</h3></a>
+                        <a href="{{path('services')}}" class="burger-menu-item"><h3>Services</h3></a>
+                        <a href="{{path('about')}}" class="burger-menu-item"><h3>About</h3></a>
+                        <a href="{{path('admin_main_page')}}" class="burger-menu-item"><h3>Contact</h3></a>
+                    </div>
+                </div>
+            </div>
+        {% endblock %}
+
+        {% block main %}{% endblock %}
+
+        {% block footer %}
+        
+            <footer>
+                <h4>"Learn and grow with Susie's little elephants"</h4>
+            </footer>
+        
+        {% endblock %}
+
+            <script src="{{asset('assets/js/script.js')}}"></script>
+
+        {% block customjavascript %}{% endblock %}
+    </body>
+</html>

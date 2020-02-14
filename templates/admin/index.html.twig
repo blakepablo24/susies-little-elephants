@@ -1,0 +1,27 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block main %}
+
+    <main>
+        
+        {% if not is_granted('ROLE_ADMIN') %}
+
+            {{render(controller("App\\Controller\\AdminController::specificChild"))}}
+
+            <div class="family-portal-container">
+                <a class="family-portal-container-options" href=""><i class="far fa-file-pdf fa-2x"></i><p>Documents & Policies</p></a>
+                <a class="family-portal-container-options" href=""><i class="far fa-envelope fa-2x"></i><p>Contact Susie</p></a>    
+            </div>
+
+        {% else %}
+            <h2 class="main-title">My Families</h2>
+            
+            {{render(controller("App\\Controller\\AdminController::families"))}}
+            
+            <a href="{{path('new_user')}}" class="add-family-form-button"><i class="fas fa-plus-circle"></i><h4>Add New User</h4></a>
+
+        {% endif %}
+
+    </main>
+
+{% endblock %}

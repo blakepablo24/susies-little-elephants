@@ -1,0 +1,41 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block main %}
+
+    <main>
+        
+        <h2 class="main-title">Edit Family</h2>
+
+       {{form_start(form, {'attr': {'novalidate':'novalidate', 'class': 'edit-family-form'}})}}
+            
+            {% if form.children|length > 0 %}
+            
+                {% for child in form.children %}
+                    {{form_row(child.name, {'attr':{'class': 'edit-family-form-field', 'placeholder': 'Childs Name'}})}}
+                {% endfor %}
+
+                <a class="edit-family-form-link" href="{{path('add_child', {'familyname':editFamily.name|lower|slugify,'id':editFamily.id})}}"><i class="fas fa-plus"></i> Add Another Child</a>
+
+            {% else %}
+                
+                <a class="edit-family-form-link" href="{{path('add_child', {'familyname':editFamily.name|lower|slugify,'id':editFamily.id})}}"><i class="fas fa-plus"></i> Add First Child</a>
+            
+
+            {% endif %}
+
+            <div class="form-errors">
+            
+                {{form_errors(form.name)}}
+                {{form_errors(form.mum)}}
+                {{form_errors(form.dad)}}
+                {{form_errors(form.guardian)}}
+            
+            </div>      
+
+        {{form_end(form)}}
+
+        <a class="edit-family-form-link" style="color: red; margin-top: 20px;" onclick="return confirm('Are you sure you want to reset this password?')" href="{{path('reset_password', {'id':editFamily.user.id})}}"><p>reset password</p></a>
+
+    </main>
+
+{% endblock %}

@@ -1,0 +1,9 @@
+{% for family in families %}
+    
+    <div class="child-container">
+        <a href="{{path('admin_family', {'familyname':family.name|lower|slugify,'id':family.id})}}"><h4 class="family-name">{{family.name}}'s</h4></a>
+        <a id="edit-family" href="{{path('edit_family', {'familyname':family.name|lower|slugify,'id':family.id})}}">edit</a>
+        <a id="delete-family" onclick="return confirm('Are you sure you want to delete this family?')" href="{{path('delete_family', {'id':family.id})}}">delete</a>    
+    </div>
+
+{% endfor %}

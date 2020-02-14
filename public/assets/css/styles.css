@@ -1,0 +1,406 @@
+/* #f8f8f8, #f1d6ab, #e3b04b, #2b2b28 */
+
+/* Titles and headers
+    font-family: 'Arimo', sans-serif;
+*/
+
+/* Content
+    font-family: 'Montserrat', sans-serif;
+*/
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    background: #f8f8f8;
+    height: 100%;
+    color: #2b2b28;
+    text-align: center;
+}
+
+/* Mobile layout */
+
+body {
+    height: 100%;
+    display: grid;
+    grid: 
+        'header header' 10vh
+        'nav nav' 10vh
+        'main main' 1fr
+        'footer footer' 10vh
+        / 3fr 1fr;
+        ;
+        font-family: 'Arimo', sans-serif;  
+}
+
+p {
+    font-family: 'Montserrat', sans-serif;
+}
+
+a {
+    text-decoration: none;
+}
+
+header {
+    grid-area: header;
+    display: grid;
+    place-items: center center;
+    grid: 1fr / 1fr 4fr 1fr;
+}
+
+/* Navigation */
+
+nav {
+    display: grid;
+    grid: 1fr / 1fr 2fr 1fr;
+}
+
+.login-container {
+    place-self: center end;
+    color: #2b2b28;
+    text-decoration: none;
+}
+
+.burger-menu-container {
+    display: grid;
+    place-items: center center;
+}
+
+.burger-navigation-menu-container{
+    height: 0%;
+    width: 100%;
+    position: fixed;
+    z-index: 1;
+    background: rgb(241,214,171, 0.95);
+    transition: 0.5s;
+    overflow-x: hidden;
+    display: grid;
+}
+
+.burger-navigation-menu {
+    display: grid;
+    grid: 1fr 3fr / 1fr;
+}
+
+.burger-navigation-menu a {
+    color: #2b2b28;
+    font-size: 1.3rem;
+    text-decoration: none;
+}
+
+.burger-menu-items-container a h3 {
+    margin-bottom: 15px;
+}
+
+.closebtn {
+    place-self: center center;
+}
+
+nav {
+    grid-area: nav;
+    background: #e3b04b;
+    display: grid;
+    place-items: center center;
+}
+
+main {
+    grid-area: main;
+    place-self: center center;
+    display: grid;
+    grid: auto / 95vw;
+    place-items: center center;
+}
+
+.main-title {
+    place-self: start center;
+}
+
+.time-line-link-title {
+    place-self: start center;
+    margin-top: 15px;
+    color: #2b2b28;
+    text-decoration: none;
+    border: solid 2px #f1d6ab;
+    padding: 10px 15px 10px 15px;
+    border-radius: 15px;
+    background: #f1d6ab;
+}
+
+/* Super admin overview Page */
+
+.child-container {
+    width: 85vw;
+    display: grid;
+    grid: 1fr / 3fr 1fr 1fr;
+    place-items: center center;
+    margin-top: 10px;
+    padding: 20px 5px 20px 5px;
+    border: 0.5px solid black;
+    border-radius: 15px;
+}
+
+.child-container a{
+    color: #2b2b28;
+}
+
+.family-name {
+    font-size: 1.1rem;
+}
+
+.add-family-form-button {
+    color: #2b2b28;
+    margin: 15px 0;
+    width: 75vw;
+    place-self: center center;
+    padding: 15px 0 15px 0;
+    border-radius: 15px;
+    border: none;
+    background-color: #a7e9af;
+}
+
+#edit-family {
+    color: green;
+    border: 1px green solid;
+    border-radius: 15px;
+    width: 55px;
+    height: 55px;
+    display: grid;
+    place-items: center center;
+}
+
+#delete-family {
+    color: red;
+    border: 1px red solid;
+    border-radius: 15px;
+    width: 55px;
+    height: 55px;
+    display: grid;
+    place-items: center center;
+}
+
+/* Super admin Edit Family & add posts */
+
+.edit-family-form {
+    display: grid;
+    grid: 1fr / 65vw;
+    margin-top: 10px;
+    border: 1px solid #2b2b28;
+    padding: 5px;
+}
+
+.edit-family-form-field {
+    text-align: center;
+    border-radius: 15px;
+    border: none;
+    padding: 5px 0 5px 0;
+    margin-top: 10px;
+}
+
+.edit-family-form-button {
+    margin-top: 10px;
+    width: 50%;
+    place-self: center center;
+    padding: 5px 0 5px 0;
+    border-radius: 15px;
+    border: none;
+    background-color: #a7e9af;
+}
+
+.form-errors {
+    color: red;
+    font-size: 0.85rem;
+}
+
+.edit-family-form-link {
+    color: #187a18;
+    margin: 10px 0;
+}
+
+/* Display posts on family page admin and parents */
+
+.timeline-post {
+    display: grid;
+    grid-column: 1fr;
+    grid-template-rows: auto;
+    margin-bottom: 15px;
+    place-items: center center;
+    width: 95vw;
+    border: solid 1px #2b2b28;
+    border-radius: 15px;
+    padding: 10px 0;
+}
+
+.timeline-post:first-of-type {
+    margin-top: 15px;
+}
+
+.timeline-post-headers {
+    display: grid;
+    grid: 1fr 1fr / 1fr 1fr;
+    width: 95vw;
+    place-items: center center;
+    margin-bottom: 10px;
+}
+
+.timeline-post-headers h3 {
+    place-self: center center;
+}
+
+.timeline-post-image-container {
+    display: grid;
+    grid: 1fr / 1fr 1fr;
+    place-items: center center;
+    margin-bottom: 10px;
+}
+
+.timeline-post-image {
+    width: 50px;
+    height: 50px;
+}
+
+.timeline-post-contact {
+    color: #2b2b28;
+    font-size: 0.8rem;
+    border: 1px green solid;
+    border-radius: 15px;
+    padding: 10px;
+    grid-column: 1 / 3;
+    margin-top: 10px;
+    width: 50vw;
+}
+
+/* Timeline post enlarge image modal */
+
+#timeline-post-mini-image:hover {
+    opacity: 0.7;
+}
+
+.enlarge-image-modal-background {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    padding-top: 100px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.9);
+  }
+
+.enlarge-image-modal-image {
+    margin: auto;
+    display: block;
+    width: 80%;
+    border-radius: 7px;
+    max-width: 700px;
+  }
+
+.enlarge-image-modal-image {  
+    -webkit-animation-name: zoom;
+    -webkit-animation-duration: 0.6s;
+    animation-name: zoom;
+    animation-duration: 0.6s;
+}
+
+@-webkit-keyframes zoom {
+    from {-webkit-transform:scale(0)} 
+    to {-webkit-transform:scale(1)}
+  }
+  
+@keyframes zoom {
+    from {transform:scale(0)} 
+    to {transform:scale(1)}
+}
+
+#new-time-line-post-form {
+    display: none;
+}
+
+.enlarge-image-modal-close-btn {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.enlarge-image-modal-close-btn:hover,
+.enlarge-image-modal-close-btn:focus {
+  color: #bbb;
+  cursor: pointer;
+}
+
+#hide-new-time-line-post-form-button {
+    display: none;
+    margin-top: 15px;
+    color: #2b2b28;
+    border: solid 2px #f1d6ab;
+    padding: 10px 15px 10px 15px;
+    border-radius: 15px;
+    background: #f1d6ab;
+}
+
+#add-new-time-line-post-form-button {
+    place-self: start center;
+    margin: 15px 0;
+    color: #2b2b28;
+    border: solid 2px #f1d6ab;
+    padding: 10px 15px 10px 15px;
+    border-radius: 15px;
+    background: #f1d6ab;
+}
+
+/* Family Portal */
+
+.family-portal-container {
+    width: 85vw;
+    display: grid;
+    grid: 1fr / 1fr 1fr;
+    place-items: center center;
+    margin-top: 10px;
+    padding: 20px 5px 20px 5px;
+}
+
+.family-portal-container-options {
+    color: #2b2b28;
+    border: 1px green solid;
+    border-radius: 15px;
+    padding: 10px;
+    height: 15vh;
+    display: grid;
+    place-items: center center;
+    font-weight: bold;
+}
+
+footer {
+    grid-area: footer;
+    background: #e3b04b;
+}
+
+/* Media Queries TODO */
+/* Mobile Landscape */
+@media (min-width: 640px) {
+
+}
+
+/* Tablet Portrait */
+@media (min-width: 768px) {
+
+}
+
+/* Tablet Landscape */
+@media (min-width: 1024px) {
+
+}
+
+/* Laptop screen or larger */
+@media (min-width: 1280px) {
+
+}

@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block main %}
+
+    <main>
+        
+        <h2 class="main-title">Contact Form</h2>
+
+        {{form_start(form, {'attr': {'novalidate':'novalidate', 'class': 'edit-family-form'}})}}
+                    
+                    
+        <div class="form-errors">
+            
+            {{form_errors(form.subject)}}
+            {{form_errors(form.content)}}
+            
+        </div>
+
+        {{form_end(form)}}
+
+
+    </main>
+
+{% endblock %}
