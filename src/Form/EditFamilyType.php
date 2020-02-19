@@ -53,7 +53,7 @@ class EditFamilyType extends AbstractType
 
             ->add('Update', SubmitType::class, [
                 'attr' => [
-                    'class' => 'edit-family-form-button',
+                    'class' => 'submit-button',
                 ],
             ])
         ;

@@ -41,19 +41,20 @@ class AddPostType extends AbstractType
                 'required' => false,
                 'constraints' => [
                     new File([
-                        'maxSize' => '1024k',
-                        // 'mimeTypes' => [
-                        //     'jpg',
-                        //     'png',
-                        // ],
-                        'mimeTypesMessage' => 'Please upload a valid image',
+                        'maxSize' => '2M',
+                        'mimeTypes' => [
+                            'image/jpeg',
+                            'image/png'
+                        ],
+                        'mimeTypesMessage' => 'The must be either Jpeg or Png Format'
                     ])
                 ]
             ])
 
-            ->add('Create_Post', SubmitType::class, [
+            ->add('save', SubmitType::class, [
+                'label' => 'Submit Post',
                 'attr' => [
-                    'class' => 'edit-family-form-button'
+                    'class' => 'submit-button'
                 ],
             ])
         ;

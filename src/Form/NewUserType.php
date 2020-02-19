@@ -49,7 +49,7 @@ class NewUserType extends AbstractType
         
             ->add('Add_New_User', SubmitType::class, [
                 'attr' => [
-                    'class' => 'edit-family-form-button',
+                    'class' => 'submit-button',
                 ],
             ])
         ;

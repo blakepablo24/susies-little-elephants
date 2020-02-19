@@ -16,7 +16,7 @@ class EditChildType extends AbstractType
             ->add('name', TextType::class, [
                 'label' => 'Child',
                 'attr' => [
-                    'class' => 'edit-family-form-field',
+                    'class' => 'submit-button',
                 ],
             ])
         ;

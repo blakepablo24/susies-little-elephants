@@ -6,15 +6,38 @@
         
         <h2 class="main-title">Contact Form</h2>
 
+        {% for message in app.flashes('success') %}
+            <div class="form-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+
         {{form_start(form, {'attr': {'novalidate':'novalidate', 'class': 'edit-family-form'}})}}
-                    
-                    
-        <div class="form-errors">
+            {% if app.user %}
+                                
+                {{ form_widget(form.name, {'attr': {'value': app.user.name~' '~app.user.lastName, 'readonly': 'true'}}) }}
+                <div class="form-errors">{{form_errors(form.name)}}</div>
+                {{ form_widget(form.email, {'attr': {'value': app.user.email, 'readonly': 'true'}}) }}
+                <div class="form-errors">{{form_errors(form.email)}}</div>
+                {{ form_widget(form.number, {'attr': {'value': '00000000000', 'readonly': 'true'}}) }}
+                <div class="form-errors">{{form_errors(form.number)}}</div>
             
-            {{form_errors(form.subject)}}
-            {{form_errors(form.content)}}
+            {% else %}
+                
+                {{ form_widget(form.name) }}
+                <div class="form-errors">{{form_errors(form.name)}}</div>
+                {{ form_widget(form.email) }}
+                <div class="form-errors">{{form_errors(form.email)}}</div>
+                {{ form_widget(form.number) }}
+                <div class="form-errors">{{form_errors(form.number)}}</div>
+
+            {% endif %}
             
-        </div>
+            {{ form_widget(form.subject) }}
+            <div class="form-errors">{{form_errors(form.subject)}}</div>
+            {{ form_widget(form.content) }}
+            <div class="form-errors">{{form_errors(form.content)}}</div>
+            {{ form_widget(form.send) }}       
 
         {{form_end(form)}}
 

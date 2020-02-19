@@ -9,6 +9,7 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\HttpFoundation\Request;
 use App\Form\FrontContactFormType;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 
 class FrontController extends AbstractController
 {
@@ -68,32 +69,25 @@ class FrontController extends AbstractController
 
             $formData = $form->getData();
 
-            $email = (new Email())
+            $email = (new TemplatedEmail())
             ->from($formData['email'])
-            ->to('susie.sle@djbagsofun.co.uk')
-            //->cc('cc@example.com')
-            //->bcc('bcc@example.com')
-            //->replyTo('fabien@example.com')
-            //->priority(Email::PRIORITY_HIGH)
+            ->to('susie@61susielittleelephants61.djbagsofun.co.uk')
             ->subject($formData['subject'])
-            ->text('It should show as html')
-            ->html(
-                '<p>'.$formData['name'].'</p>'.
-                '<p>'.$formData['number'].'</p>'.
-                '<p>'.$formData['content'].'</p>'
-            );
+            ->htmlTemplate('emails/contact_form.html.twig')
+            ->context([
+                'senders_email' => $formData['email'],
+                'subject' => $formData['subject'],
+                'name' => $formData['name'],
+                'number' => $formData['number'],
+                'content' => $formData['content']
+            ]);
 
             /** @var Symfony\Component\Mailer\SentMessage $sentEmail */
             $sentEmail = $mailer->send($email);
-            // $messageId = $sentEmail->getMessageId();
+            
+            $this->addFlash('success', 'Message Successfully Sent, Susie will get back to you as soon as possible');
 
-            // ...
-
-            // $entityManager = $this->getDoctrine()->getManager();
-            // $entityManager->persist($user);
-            // $entityManager->flush();
-
-            // return $this->redirectToRoute('new_family', ['id' => $id]);
+            return $this->redirectToRoute('contact');
         }
             return $this->render('front/contact.html.twig', [
                 'form' => $form->createView(),

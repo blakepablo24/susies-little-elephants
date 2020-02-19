@@ -4,12 +4,12 @@
 
     <main>
 
-        <h3 class="main-title">The {{specific_family.name}} Family</h3>
+        <h1 class="main-title">The {{specific_family.name}} Family</h1>
         
         {% if is_granted('ROLE_ADMIN') %}
 
             {% for child in specific_child %}
-                    <a class="time-line-link-title" href="{{path('admin_time_line', {'childname':child.name|lower|slugify,'id':child.id})}}"><h2>{{child.name}}'s Timeline</h2></a>
+                    <a class="time-line-link-title" href="{{path('admin_time_line', {'childname':child.name|lower|slugify,'id':child.id})}}">{{child.name|upper}}</a>
             {% endfor %}
 
         {% else %}

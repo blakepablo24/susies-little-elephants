@@ -12,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\Length;
 
 class FrontContactFormType extends AbstractType
 {
@@ -19,13 +20,22 @@ class FrontContactFormType extends AbstractType
     {
         $builder
         ->add('name', TextType::class, [
+            'constraints' => [
+                new NotBlank(),
+                new Length(['min' => 3]),
+            ],
             'label' => false,
             'attr' => [
                 'class' => 'edit-family-form-field',
                 'placeholder' => 'Your Name'
             ],
         ])
-        ->add('email', TextType::class, [
+        ->add('email', EmailType::class, [
+            'constraints' => [
+                new NotBlank(),
+                new Length(['min' => 3]),
+                new Email,
+            ],
             'label' => false,
             'attr' => [
                 'class' => 'edit-family-form-field',
@@ -33,6 +43,10 @@ class FrontContactFormType extends AbstractType
             ],
         ])
         ->add('number', TextType::class, [
+            'constraints' => [
+                new NotBlank(),
+                new Length(11),
+            ],
             'label' => false,
             'attr' => [
                 'class' => 'edit-family-form-field',
@@ -40,6 +54,10 @@ class FrontContactFormType extends AbstractType
             ],
         ])
         ->add('subject', TextType::class, [
+            'constraints' => [
+                new NotBlank(),
+                new Length(['min' => 3]),
+            ],
             'label' => false,
             'attr' => [
                 'class' => 'edit-family-form-field',
@@ -48,18 +66,23 @@ class FrontContactFormType extends AbstractType
         ])
 
         ->add('content', TextareaType::class, [
+            'constraints' => [
+                new NotBlank(),
+                new Length(['min' => 3]),
+            ],
             'label' => false,
             'attr' => [
                 'class' => 'edit-family-form-field',
-                'placeholder' => 'PostDetails',
+                'placeholder' => 'Message',
                 'cols' => '30',
                 'rows' => '10'
             ],
         ])
 
-        ->add('Send', SubmitType::class, [
+        ->add('send', SubmitType::class, [
+            'label' => 'Send',
             'attr' => [
-                'class' => 'edit-family-form-button'
+                'class' => 'submit-button'
             ],
         ])
     ;

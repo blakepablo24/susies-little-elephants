@@ -34,7 +34,7 @@
 
         {{form_end(form)}}
 
-        <a class="edit-family-form-link" style="color: red; margin-top: 20px;" onclick="return confirm('Are you sure you want to reset this password?')" href="{{path('reset_password', {'id':editFamily.user.id})}}"><p>reset password</p></a>
+        <a style="font-weight: bold; color: red; margin-top: 20px;" onclick="return confirm('Are you sure you want to reset this password?')" href="{{path('reset_password', {'id':editFamily.user.id})}}"><p>reset password</p></a>
 
     </main>
 

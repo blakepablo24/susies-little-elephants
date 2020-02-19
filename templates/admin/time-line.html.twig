@@ -8,14 +8,16 @@
 
         {% if is_granted('ROLE_ADMIN') %}
 
-            <a id="add-new-time-line-post-form-button" href="javascript:void(0)" onclick="revealPostForm()"><i class="fas fa-plus"></i> Add New Post</a>
-            <a id="hide-new-time-line-post-form-button" href="javascript:void(0)" onclick="hidePostForm()"><i class="fas fa-minus"></i> Hide</a>
+            <a id="add-new-time-line-post-form-button" class="add-new-button" href="javascript:void(0)" onclick="revealPostForm()"><i class="fas fa-plus"></i> ADD POST</a>
+            <a id="hide-new-time-line-post-form-button" class="add-new-button" href="javascript:void(0)" onclick="hidePostForm()"><i class="fas fa-minus"></i> HIDE</a>
 
             {# Post form hidden until add post is clicked #}
 
             {{form_start(form, {'attr': {'novalidate':'novalidate', 'id': 'new-time-line-post-form', 'class': 'edit-family-form'}})}}
-                    {{ form_row(form.subject) }}
-                    {{ form_row(form.content) }}
+                    {{ form_widget(form.subject) }}
+                    {{ form_widget(form.content) }}
+                    {{ form_widget(form.image) }}
+                    {{ form_widget(form.save) }}
             <div class="form-errors">
                 
                     {{form_errors(form.subject)}}
@@ -46,8 +48,12 @@
                 <p>{{post.content}}</p>
 
                 <div class="timeline-post-image-container">
-                    <h5>Attached Image</h5>
-                    <img  id="timeline-post-mini-image" class="timeline-post-image allPostImages" src="{{asset('assets/img/posts/' ~ post.imageFileName)}}" alt="">
+                    {% if post.imageFileName %}
+                        <h5>Attached Image</h5>
+                        <img  id="timeline-post-mini-image" class="timeline-post-image allPostImages" src="{{asset('assets/img/posts/' ~ post.imageFileName)|imagine_filter('downscale_filer')}}" alt="">
+                    {% endif %}
+
+
                     {% if not is_granted('ROLE_ADMIN') %}
 
                         <a class="timeline-post-contact" href=""><i class="far fa-envelope"></i><p>Contact Susie regarding this post</p></a>

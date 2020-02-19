@@ -29,7 +29,8 @@ class PostRepository extends ServiceEntityRepository
         $query = $entityManager->createQuery(
             'SELECT p
             FROM App\Entity\Post p
-            WHERE p.child = :child_id'
+            WHERE p.child = :child_id
+            ORDER BY p.date DESC'
         )->setParameter('child_id', $child_id);
 
         // returns an array of Product objects

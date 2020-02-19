@@ -26,7 +26,6 @@ var modal = document.getElementById("enlargeImageModal");
 var img = document.getElementById("timeline-post-mini-image");
 var images = document.getElementsByClassName('allPostImages');
 var modalImg = document.getElementById("img01");
-var captionText = document.getElementById("caption");
 
 for (var i = 0; i < images.length; i++) {
     var img = images[i];
@@ -34,7 +33,6 @@ for (var i = 0; i < images.length; i++) {
     img.onclick = function(evt) {
       modal.style.display = "flex";
       modalImg.src = this.src;
-      captionText.innerHTML = this.alt;
     }
 }
 

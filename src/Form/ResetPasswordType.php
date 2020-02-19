@@ -34,7 +34,7 @@ class ResetPasswordType extends AbstractType
 
         ->add('Update_Password', SubmitType::class, [
             'attr' => [
-                'class' => 'edit-family-form-button',
+                'class' => 'submit-button',
             ],
         ])
         ;
