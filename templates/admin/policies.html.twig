@@ -1,0 +1,13 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block main %}
+
+    <main>
+
+        <h2 class="main-title">SLE Documents and Policies</h2>
+        
+        {{render(controller("App\\Controller\\AdminController::policies"))}}
+
+    </main>
+
+{% endblock %}

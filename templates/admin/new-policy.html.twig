@@ -1,0 +1,20 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block main %}
+
+    <main>
+        
+        <h2 class="main-title">Add New Policy</h2>
+
+            {{form_start(form, {'attr': {'novalidate':'novalidate', 'class': 'edit-family-form'}})}}
+                {{form_widget(form.policy_name, {'attr': {'class': 'edit-family-form-field'}})}}
+                <div class="form-errors">{{form_errors(form.policy_name)}}</div>
+                {{form_widget(form.policy, {'attr': {'class': 'edit-family-form-field'}})}}
+                <div class="form-errors">{{form_errors(form.policy)}}</div>
+                {{form_widget(form.save, {'attr': {'class': 'submit-button'}})}}
+
+        {{form_end(form)}}
+
+    </main>
+
+{% endblock %}

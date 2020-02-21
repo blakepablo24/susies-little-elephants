@@ -48,9 +48,7 @@ class NewUserType extends AbstractType
             ])
         
             ->add('Add_New_User', SubmitType::class, [
-                'attr' => [
-                    'class' => 'submit-button',
-                ],
+                'label' => 'Add User'
             ])
         ;
     }

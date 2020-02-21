@@ -29,7 +29,14 @@
 
         {% endif %}
         
-        {% for post in childs_posts %}
+        {% if childs_posts|length < 1 %}
+
+        {% if not is_granted('ROLE_ADMIN') %}
+            <p class="main-title">There are no time line posts yet for {{child.name}}, however be sure to come back soon :)</p>
+        {% endif %}
+
+            {% else %}
+                {% for post in childs_posts %}
 
             <div class="timeline-post">
                 <div class="timeline-post-headers">
@@ -50,7 +57,7 @@
                 <div class="timeline-post-image-container">
                     {% if post.imageFileName %}
                         <h5>Attached Image</h5>
-                        <img  id="timeline-post-mini-image" class="timeline-post-image allPostImages" src="{{asset('assets/img/posts/' ~ post.imageFileName)|imagine_filter('downscale_filer')}}" alt="">
+                        <img  id="timeline-post-mini-image" class="timeline-post-image allPostImages" src="{{asset('assets/img/posts/' ~ post.imageFileName)|imagine_filter('downscale_filter')}}" alt="">
                     {% endif %}
 
 
@@ -64,6 +71,8 @@
             </div>
 
         {% endfor %}
+
+        {% endif %}
 
         {# Modal for enlarging timeline post images #}
 

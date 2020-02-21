@@ -11,6 +11,7 @@ use App\Form\AddChildType;
 use App\Form\AddPostType;
 use App\Form\EditPostType;
 use App\Form\ResetPasswordType;
+use App\Form\NewPolicyType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -18,9 +19,14 @@ use App\Entity\Family;
 use App\Entity\Child;
 use App\Entity\Post;
 use App\Entity\User;
+use App\Entity\Policy;
 use Symfony\Component\Filesystem\Filesystem;
 use Intervention\Image\ImageManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Kinglozzer\TinyPng\Compressor;
+use Kinglozzer\TinyPng\Exception\AuthorizationException;
+use Kinglozzer\TinyPng\Exception\InputException;
+use Kinglozzer\TinyPng\Exception\LogicException;
 
 
 /**
@@ -125,19 +131,42 @@ class AdminController extends AbstractController
         {
             
             $imageFile = $form->get('image')->getData();
+            
 
             if($imageFile)
             {
+                $compressor = new Compressor('gpYyPbcWHr93Cjtx9rm87xV2pMDrpch6');
+                
+                // try {
+                //     $result = $compressor->compress('<image data>', true); // Compress raw image data
+                //     $result->getCompressedFileSize(); // Int size of compressed image, e.g: 104050
+                //     $result->getCompressedFileSize(true); // Human-readable, e.g: '101.61 KB'
+                //     $result->getResponseData(); // array containing JSON-decoded response data
+                // } catch (AuthorizationException $e) {
+                //     // Invalid credentials or requests per month exceeded
+                // } catch (InputException $e) {
+                //     // Not a valid PNG or JPEG
+                // } catch (Exception $e) {
+                //     // Unknown error
+                // }
+
                 $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
                 $newFilename = $originalFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
 
                 try {
-                    $imageFile->move(
+                    $result = $compressor->compress($imageFile, true);
+                    $result->move(
                         $this->getParameter('post_image_directory'),
                         $newFilename
                     );
                 } catch (FileException $e) {
                     // ... handle exception if something happens during file upload
+                }catch (AuthorizationException $e) {
+                    // Invalid credentials or requests per month exceeded
+                } catch (InputException $e) {
+                    // Not a valid PNG or JPEG
+                } catch (Exception $e) {
+                    // Unknown error
                 }
     
                 $newPost->setImageFilename($newFilename);
@@ -327,6 +356,84 @@ class AdminController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/policies", name="policies")
+     */
+    public function policiesForFamily()
+    {
+        return $this->render('admin/policies.html.twig');
+    }
+
+    /**
+     * @Route("/su/new-policy", name="new_policy", methods={"GET","POST"})
+     */
+    public function newPolicy(Request $request)
+    {
+
+        $policy = new Policy();
+        $form = $this->createForm(NewPolicyType::class, $policy);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var UploadedFile $brochureFile */
+            $policyFile = $form->get('policy')->getData();
+
+            // this condition is needed because the 'brochure' field is not required
+            // so the PDF file must be processed only when a file is uploaded
+            if ($policyFile) {
+                $originalFilename = pathinfo($policyFile->getClientOriginalName(), PATHINFO_FILENAME);
+                // this is needed to safely include the file name as part of the URL
+                $safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$policyFile->guessExtension();
+
+                // Move the file to the directory where brochures are stored
+                try {
+                    $policyFile->move(
+                        $this->getParameter('policy_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                }
+
+                // updates the 'brochureFilename' property to store the PDF file name
+                // instead of its contents
+                $policy->setPolicyFilename($newFilename);
+            }
+
+            $policy->setPolicyName($request->request->get('new_policy')['policy_name']);
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($policy);
+            $entityManager->flush();
+
+
+            return $this->redirectToRoute('admin_main_page');
+        }
+
+        return $this->render('admin/new-policy.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/su/delete-policy/{id}", name="delete_policy")
+     */
+    public function deletePolicy(Policy $policy)
+    {
+        $policyFile = $policy->getPolicyFileName();
+        $path=$this->getParameter('policy_directory').'/'.$policyFile;
+
+        $fs = new FileSystem();
+        $fs->remove(array($path));
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($policy);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('admin_main_page');
+    }
+
     // Functions
 
     public function families()
@@ -336,6 +443,16 @@ class AdminController extends AbstractController
         $families = $this->getDoctrine()->getRepository(Family::class)->findAll();
         return $this->render('admin/includes/_families.html.twig', [
             'families'=>$families
+            ]);
+
+    }
+
+    public function policies()
+    {
+
+        $policies = $this->getDoctrine()->getRepository(Policy::class)->findAll();
+        return $this->render('admin/includes/_policies.html.twig', [
+            'policies'=>$policies
             ]);
 
     }

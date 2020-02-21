@@ -27,13 +27,14 @@
             <h3>Please Login</h3>
             <input class="edit-family-form-field" name="_email" type="text" placeholder="username">
             <input class="edit-family-form-field" name="_password" type="password" placeholder="password">
+            <br>
             <div>
                 <label>
                     <input name="_remember_me" type="checkbox">    
                     Remember me
                 </label>
             </div>
-            <button class="edit-family-form-button" type="submit">Login</button>
+            <button class="submit-button" type="submit">Login</button>
             <input name="_csrf_token" type="hidden" value="{{csrf_token('authenticate')}}">
         </form>
     
