@@ -41,12 +41,13 @@ class AddPostType extends AbstractType
                 'required' => false,
                 'constraints' => [
                     new File([
-                        'maxSize' => '2M',
+                        'maxSize' => '5M',
                         'mimeTypes' => [
                             'image/jpeg',
                             'image/png'
                         ],
-                        'mimeTypesMessage' => 'The must be either Jpeg or Png Format'
+                        'mimeTypesMessage' => 'The image must be either Jpeg or Png Format',
+                        'maxSizeMessage' => 'The Image cannot be bigger than 5 MB'
                     ])
                 ]
             ])

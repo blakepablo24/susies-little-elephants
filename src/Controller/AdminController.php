@@ -23,10 +23,6 @@ use App\Entity\Policy;
 use Symfony\Component\Filesystem\Filesystem;
 use Intervention\Image\ImageManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Kinglozzer\TinyPng\Compressor;
-use Kinglozzer\TinyPng\Exception\AuthorizationException;
-use Kinglozzer\TinyPng\Exception\InputException;
-use Kinglozzer\TinyPng\Exception\LogicException;
 
 
 /**
@@ -135,38 +131,17 @@ class AdminController extends AbstractController
 
             if($imageFile)
             {
-                $compressor = new Compressor('gpYyPbcWHr93Cjtx9rm87xV2pMDrpch6');
-                
-                // try {
-                //     $result = $compressor->compress('<image data>', true); // Compress raw image data
-                //     $result->getCompressedFileSize(); // Int size of compressed image, e.g: 104050
-                //     $result->getCompressedFileSize(true); // Human-readable, e.g: '101.61 KB'
-                //     $result->getResponseData(); // array containing JSON-decoded response data
-                // } catch (AuthorizationException $e) {
-                //     // Invalid credentials or requests per month exceeded
-                // } catch (InputException $e) {
-                //     // Not a valid PNG or JPEG
-                // } catch (Exception $e) {
-                //     // Unknown error
-                // }
 
                 $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
                 $newFilename = $originalFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
 
                 try {
-                    $result = $compressor->compress($imageFile, true);
-                    $result->move(
+                    $imageFile->move(
                         $this->getParameter('post_image_directory'),
                         $newFilename
                     );
                 } catch (FileException $e) {
                     // ... handle exception if something happens during file upload
-                }catch (AuthorizationException $e) {
-                    // Invalid credentials or requests per month exceeded
-                } catch (InputException $e) {
-                    // Not a valid PNG or JPEG
-                } catch (Exception $e) {
-                    // Unknown error
                 }
     
                 $newPost->setImageFilename($newFilename);

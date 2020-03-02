@@ -14,13 +14,18 @@
             </div>
 
         {% else %}
-            <h1 class="main-title">My Families</h1>
-                {{render(controller("App\\Controller\\AdminController::families"))}}
-            <a href="{{path('new_user')}}" class="add-new-button"><i class="fas fa-plus-circle"></i><h4>ADD USER</h4></a>
 
-            <h1 class="main-title">My Policies</h1>
+        <div class="admin-tab-container">
+            <button class="tab-button tablink selected" onclick="openTab(event,'Families')" >
+                <h1 class="main-title">Families</h1>
+            </button>
+            <button class="tab-button tablink" onclick="openTab(event,'Policies')">
+                <h1 class="main-title">Policies</h1>
+            </button>
+        </div>
+
+                {{render(controller("App\\Controller\\AdminController::families"))}}
                 {{render(controller("App\\Controller\\AdminController::policies"))}}
-            <a href="{{path('new_policy')}}" class="add-new-button"><i class="far fa-file-pdf"></i><h4>ADD POLICY</h4></a>
 
         {% endif %}
 

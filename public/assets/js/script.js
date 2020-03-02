@@ -31,15 +31,26 @@ for (var i = 0; i < images.length; i++) {
     var img = images[i];
     // and attach our click listener for this image.
     img.onclick = function(evt) {
-      modal.style.display = "flex";
+      modal.style.display = "grid";
       modalImg.src = this.src;
     }
 }
 
-// Get the <span> element that closes the modal
 var span = document.getElementsByClassName("enlarge-image-modal-close-btn")[0];
-
-// When the user clicks on <span> (x), close the modal
 span.onclick = function() { 
   modal.style.display = "none";
 }
+
+function openTab(evt, tabName) {
+    var i, x, tablinks;
+    x = document.getElementsByClassName("tab");
+    for (i = 0; i < x.length; i++) {
+      x[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablink");
+    for (i = 0; i < x.length; i++) {
+      tablinks[i].className = tablinks[i].className.replace(" selected", "");
+    }
+    document.getElementById(tabName).style.display = "grid";
+    evt.currentTarget.className += " selected";
+  }

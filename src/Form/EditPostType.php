@@ -36,17 +36,18 @@ class EditPostType extends AbstractType
             ])
 
             ->add('image', FileType::class, [
-                'label' => 'Enter an image (Jpeg or Png',
+                'label' => 'Enter an image (Jpeg or Png)',
                 'mapped' => false,
                 'required' => false,
                 'constraints' => [
                     new File([
-                        'maxSize' => '1024k',
-                        // 'mimeTypes' => [
-                        //     'jpg',
-                        //     'png',
-                        // ],
-                        'mimeTypesMessage' => 'Please upload a valid image',
+                        'maxSize' => '5M',
+                        'mimeTypes' => [
+                            'image/jpeg',
+                            'image/png'
+                        ],
+                        'mimeTypesMessage' => 'The image must be either Jpeg or Png Format',
+                        'maxSizeMessage' => 'The Image cannot be bigger than 5 MB'
                     ])
                 ]
             ])

@@ -5,21 +5,21 @@ liip_imagine:
   filter_sets:
 
         # name our first filter set "my_max_down_scale_filter"
-        downscale_filer:
-            filters:
+        # downscale_filter:
+        #     filters:
 
-                # use and setup the "downscale" filter
-                downscale:
+        #         # use and setup the "downscale" filter
+        #         downscale:
 
-                    # input 3960x2560px -> output 1980x1280px
-                    max: [1024, 768]
+        #             # input 3960x2560px -> output 1980x1280px
+        #             max: [1024, 768]
 
         # name our second filter set "my_by_down_scale_filter"
-        my_by_down_scale_filter:
+        downscale_filter:
             filters:
 
                 # use and setup the "downscale" filter
                 downscale:
 
                     # input 1980x1280px -> output 792x512px
-                    by: 0.6
+                    by: 0.5
