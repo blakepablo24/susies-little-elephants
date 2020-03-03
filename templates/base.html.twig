@@ -32,9 +32,22 @@
                 <img class="header-image" src="{{asset('assets/img/front-page-images/ofsted-logo.png')}}" alt="">
             </header>
             <nav>
+                
+                {# Burger menu #}
+
                 <div onclick="openBurgerMenu()" class="burger-menu-container">
                     <i class="fas fa-bars fa-2x"></i>
                 </div>
+
+                {# Large Screen menu #}
+
+                <div class="large-navigation-menu">
+                    <a href="{{path('main_page')}}" class="burger-menu-item"><h3>Home</h3></a>
+                    <a href="{{path('services')}}" class="burger-menu-item"><h3>Services</h3></a>
+                    <a href="{{path('about')}}" class="burger-menu-item"><h3>About</h3></a>
+                    <a href="{{path('contact')}}" class="burger-menu-item"><h3>Contact</h3></a>
+                </div>
+
                 <div>
                     {% if not app.user %}
 
@@ -73,6 +86,7 @@
                     </div>
                 </div>
             </div>
+            
         {% endblock %}
 
         {% block main %}{% endblock %}

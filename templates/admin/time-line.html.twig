@@ -4,12 +4,12 @@
 
     <main>
 
-        <h3 class="main-title">{{child.name}}'s Time-line</h3>
+        <h1 class="main-title">{{child.name}}'s Time-line</h1>
 
         {% if is_granted('ROLE_ADMIN') %}
 
-            <a id="add-new-time-line-post-form-button" class="add-new-button" href="javascript:void(0)" onclick="revealPostForm()"><i class="fas fa-plus"></i> ADD POST</a>
-            <a id="hide-new-time-line-post-form-button" class="add-new-button" href="javascript:void(0)" onclick="hidePostForm()"><i class="fas fa-minus"></i> HIDE</a>
+            <a id="add-new-time-line-post-form-button" class="add-new-post-button" href="javascript:void(0)" onclick="revealPostForm()"><i class="fas fa-plus"></i> ADD POST</a>
+            <a id="hide-new-time-line-post-form-button" class="add-new-post-button" href="javascript:void(0)" onclick="hidePostForm()"><i class="fas fa-minus"></i> HIDE</a>
 
             {# Post form hidden until add post is clicked #}
 
@@ -37,41 +37,43 @@
         {% endif %}
 
             {% else %}
+            <div class="timeline-post-container">
                 {% for post in childs_posts %}
+                <div class="timeline-post">
+                    <div class="timeline-post-headers">
+                        <h3>{{post.subject}}</h3>
+                        <h4>{{post.date|date('D-d-m-y')}}</h4>
+            
+                        {% if not is_granted('ROLE_ADMIN') %}
 
-            <div class="timeline-post">
-                <div class="timeline-post-headers">
-                    <h3>{{post.subject}}</h3>
-                    <h4>{{post.date|date('D-d-m-y')}}</h4>
-        
-                    {% if not is_granted('ROLE_ADMIN') %}
+                        {% else %}
+                            <a id="edit-family" href="{{path('edit_post', {'postname':post.subject|lower|slugify,'id':post.id})}}"><i class="fas fa-edit"></i></a>
+                            <a id="delete-family" onclick="return confirm('Are you sure you want to delete this post?')" href="{{path('delete_post', {'id':post.id})}}"><i class="fas fa-trash-alt"></i></a>                
+                        {% endif %}
+            
+                    </div>
 
-                    {% else %}
-                        <a id="edit-family" href="{{path('edit_post', {'postname':post.subject|lower|slugify,'id':post.id})}}"><i class="fas fa-edit"></i></a>
-                        <a id="delete-family" onclick="return confirm('Are you sure you want to delete this post?')" href="{{path('delete_post', {'id':post.id})}}"><i class="fas fa-trash-alt"></i></a>                
-                    {% endif %}
-        
+                    <p>{{post.content}}</p>
+
+                    <div class="timeline-post-image-container">
+                        {% if post.imageFileName %}
+                            <h5>Attached Image</h5>
+                            <img  id="timeline-post-mini-image" class="timeline-post-image allPostImages" src="{{asset('assets/img/posts/' ~ post.imageFileName)|imagine_filter('downscale_filter')}}" alt="">
+                        {% endif %}
+
+
+                        {% if not is_granted('ROLE_ADMIN') %}
+
+                            <a class="timeline-post-contact" href=""><i class="far fa-envelope"></i><p>Contact Susie regarding this post</p></a>
+                    
+                        {% endif %}
+                    </div>
+
                 </div>
-
-                <p>{{post.content}}</p>
-
-                <div class="timeline-post-image-container">
-                    {% if post.imageFileName %}
-                        <h5>Attached Image</h5>
-                        <img  id="timeline-post-mini-image" class="timeline-post-image allPostImages" src="{{asset('assets/img/posts/' ~ post.imageFileName)|imagine_filter('downscale_filter')}}" alt="">
-                    {% endif %}
-
-
-                    {% if not is_granted('ROLE_ADMIN') %}
-
-                        <a class="timeline-post-contact" href=""><i class="far fa-envelope"></i><p>Contact Susie regarding this post</p></a>
-                
-                    {% endif %}
-                </div>
-
-            </div>
 
         {% endfor %}
+
+            </div>
 
         {% endif %}
 
