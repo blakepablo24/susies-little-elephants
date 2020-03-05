@@ -2,7 +2,7 @@
 
 {% block main %}
 
-    <main>
+    <main style="place-self: start center;">
         
         {% if not is_granted('ROLE_ADMIN') %}
 
@@ -14,7 +14,7 @@
             </div>
 
         {% else %}
-
+        
         <div class="admin-tab-container">
             <button class="tab-button tablink selected" onclick="openTab(event,'Families')" >
                 <h1 class="main-title">Families</h1>
@@ -28,7 +28,6 @@
                 {{render(controller("App\\Controller\\AdminController::policies"))}}
 
         {% endif %}
-
     </main>
 
 {% endblock %}
