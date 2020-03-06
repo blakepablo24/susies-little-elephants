@@ -7,19 +7,18 @@
         <h2 class="main-title">Add New User</h2>
 
             {{form_start(form, {'attr': {'novalidate':'novalidate', 'class': 'edit-family-form'}})}}
+                
                 {{form_widget(form.name, {'attr': {'class': 'edit-family-form-field'}})}}
-                {{form_widget(form.Last_Name, {'attr': {'class': 'edit-family-form-field'}})}}
-                {{form_widget(form.email, {'attr': {'class': 'edit-family-form-field'}})}}
-                {{form_widget(form.password, {'attr': {'class': 'edit-family-form-field'}})}}
+                <div class="form-errors">{{form_errors(form.name)}}</div>
 
-                <div class="form-errors">
+                {{form_widget(form.last_name, {'attr': {'class': 'edit-family-form-field'}})}}
+                <div class="form-errors">{{form_errors(form.last_name)}}</div>
                 
-                    {{form_errors(form.name)}}
-                    {{form_errors(form.Last_Name)}}
-                    {{form_errors(form.email)}}
-                    {{form_errors(form.password)}}
-                
-                </div>
+                {{form_widget(form.email, {'attr': {'class': 'edit-family-form-field'}})}}
+                <div class="form-errors">{{form_errors(form.email)}}</div>
+
+                {{form_widget(form.password, {'attr': {'class': 'edit-family-form-field'}})}}
+                <div class="form-errors">{{form_errors(form.password)}}</div>
 
                 {{form_widget(form.Add_New_User, {'attr': {'class': 'submit-button'}})}}
 

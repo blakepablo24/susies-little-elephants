@@ -36,7 +36,6 @@ class AddPostType extends AbstractType
             ])
 
             ->add('image', FileType::class, [
-                'label' => 'Enter an image (Jpeg or Png',
                 'mapped' => false,
                 'required' => false,
                 'constraints' => [

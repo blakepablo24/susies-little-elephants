@@ -76,6 +76,38 @@ a {
     box-shadow: 1px 5px 3px #464444;
 }
 
+/* Pagination */
+
+.pagination {
+    display: grid;
+    grid-auto-flow: column;
+    place-items: center center;
+    background: #bbcfff;
+    border-radius: 5px;
+    font-size: 2rem;
+    font-weight: bold;
+    padding: 2px;
+}
+
+.first {
+
+}
+
+.page {
+
+}
+
+.current, .first, .last, .next, .previous, .page {
+    padding: 0 10px;
+}
+
+.current {
+    border: solid;
+    background: #f0efef;
+    border-radius: 5px;
+    height: 100%;
+}
+
 header {
     grid-area: header;
     display: grid;
@@ -411,6 +443,7 @@ footer {
     background: #bbcfff;
     display: grid;
     place-items: center center;
+    margin-top: 10px;
 }
 
 /* Media Queries */
@@ -423,7 +456,7 @@ footer {
             'header header' 18vh
             'nav nav' 15vh
             'main main' 1fr
-            'footer footer' 8vh
+            'footer footer' 12vh
             / 3fr 1fr;
             ;
     }

@@ -21,7 +21,7 @@
                     {{ form_widget(form.content) }}
                     <div class="form-errors">{{form_errors(form.content)}}</div>
 
-                    {{ form_widget(form.image) }}
+                    {{form_widget(form.image, {'label': 'Upload New Image with post'})}}
                     <div class="form-errors">{{form_errors(form.image)}}</div>
 
                     {{ form_widget(form.save) }}
@@ -30,7 +30,7 @@
 
         {% endif %}
         
-        {% if childs_posts|length < 1 %}
+        {% if pagination|length < 1 %}
 
         {% if not is_granted('ROLE_ADMIN') %}
             <p class="main-title">There are no time line posts yet for {{child.name}}, however be sure to come back soon :)</p>
@@ -38,7 +38,7 @@
 
             {% else %}
             <div class="timeline-post-container">
-                {% for post in childs_posts %}
+                {% for post in pagination %}
                 <div class="timeline-post">
                     <div class="timeline-post-headers">
                         <h3>{{post.subject}}</h3>
@@ -76,6 +76,10 @@
             </div>
 
         {% endif %}
+
+        <div class="pagination">
+            {{ knp_pagination_render(pagination) }}
+        </div>
 
         {# Modal for enlarging timeline post images #}
 

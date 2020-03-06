@@ -7,8 +7,9 @@
         <h2 class="main-title">Add Child to the {{family.name}} Family</h2>
 
             {{form_start(form, {'attr': {'novalidate':'novalidate', 'class': 'edit-family-form'}})}}
-                
-                
+
+                {{form_widget(form.name, {'attr': {'class': 'edit-family-form-field'}})}}
+                <div class="form-errors">{{form_errors(form.name)}}</div>
 
             {{form_end(form)}}
 

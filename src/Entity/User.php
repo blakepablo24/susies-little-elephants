@@ -9,7 +9,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="users")
- * @UniqueEntity("email")
+ * @UniqueEntity(
+ *     fields={"email"},
+ *     message="This email already exists!"
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
 class User implements UserInterface
@@ -22,8 +25,8 @@ class User implements UserInterface
     private $id;
 
     /**
-     * @Assert\NotBlank(message = "Please enter a valid email address")
-     * @Assert\Email()
+     * @Assert\NotBlank(message = "Please enter an email address")
+     * @Assert\Email(message = "Please enter a valid email address")
      * @ORM\Column(type="string", length=180, unique=true)
      */
     private $email;
@@ -42,14 +45,14 @@ class User implements UserInterface
     private $password;
 
     /**
+     * @Assert\NotBlank(message = "Please enter a First Name")
      * @ORM\Column(type="string", length=45)
-     * @Assert\NotBlank(message = "Valid first name is required")
      */
     private $name;
 
     /**
+     * @Assert\NotBlank(message = "Please enter a Last Name")
      * @ORM\Column(type="string", length=45)
-     * @Assert\NotBlank(message = "Valid last name is required")
      */
     private $last_name;
 

@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class NewUserType extends AbstractType
@@ -23,7 +24,7 @@ class NewUserType extends AbstractType
                 ],
             ])
 
-            ->add('Last_Name', TextType::class, [
+            ->add('last_name', TextType::class, [
                 'label' => false,
                 'attr' => [
                     'class' => 'edit-family-form-field',
@@ -31,7 +32,7 @@ class NewUserType extends AbstractType
                 ],
             ])
 
-            ->add('email', TextType::class, [
+            ->add('email', EmailType::class, [
                 'label' => false,
                 'attr' => [
                     'class' => 'edit-family-form-field',
@@ -41,6 +42,7 @@ class NewUserType extends AbstractType
 
             ->add('password', PasswordType::class, [
                 'label' => false,
+                'empty_data' => '',
                 'attr' => [
                     'class' => 'edit-family-form-field',
                     'placeholder' => 'Password'

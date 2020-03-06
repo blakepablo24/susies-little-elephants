@@ -41,7 +41,7 @@ class NewTimelinePostNotifier
 
             $email = (new TemplatedEmail())
             ->from('no-reply@61susielittleelephants61.djbagsofun.co.uk')
-            ->to('susie@61susielittleelephants61.djbagsofun.co.uk')
+            ->to($user->getEmail())
             ->subject('New Post on '.$child->getName().'\'s Timeline')
             ->htmlTemplate('emails/new_timeline_post.html.twig')
             ->context([

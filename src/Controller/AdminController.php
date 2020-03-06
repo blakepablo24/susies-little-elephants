@@ -23,6 +23,7 @@ use App\Entity\Policy;
 use Symfony\Component\Filesystem\Filesystem;
 use Intervention\Image\ImageManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Knp\Component\Pager\PaginatorInterface;
 
 
 /**
@@ -60,7 +61,7 @@ class AdminController extends AbstractController
             $password = $request->request->get('new_user')['password'];
             $user->setPassword($this->password_encoder->encodePassword($user, $password));
             $user->setName($request->request->get('new_user')['name']);
-            $user->setLastName($request->request->get('new_user')['Last_Name']);
+            $user->setLastName($request->request->get('new_user')['last_name']);
             $user->setEmail($request->request->get('new_user')['email']);
             $user->setRoles(['ROLE_USER']);
 
@@ -114,10 +115,16 @@ class AdminController extends AbstractController
     /**
      * @Route("/time-line/{childname}, {id}", name="admin_time_line", methods={"GET","POST"})
      */
-    public function timeLine($id, Child $child, Request $request)
+    public function timeLine($id, Child $child, PaginatorInterface $paginator, Request $request)
     {   
 
         $childs_posts = $this->getDoctrine()->getRepository(Post::class)->findPostsByChildId($id);
+
+        $pagination = $paginator->paginate(
+            $childs_posts, /* query NOT result */
+            $request->query->getInt('page', 1), /*page number*/
+            6 /*limit per page*/
+        );
 
         $newPost = new Post();
         $form = $this->createForm(AddPostType::class, $newPost);
@@ -161,7 +168,7 @@ class AdminController extends AbstractController
 
         return $this->render('admin/time-line.html.twig', [
         'child' => $child,
-        'childs_posts' => $childs_posts,
+        'pagination' => $pagination,
         'form' => $form->createView()
         ]);
     }
