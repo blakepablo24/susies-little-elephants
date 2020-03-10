@@ -24,6 +24,7 @@ var modal = document.getElementById("enlargeImageModal");
 
 // Get the image and insert it inside the modal - use its "alt" text as a caption
 var img = document.getElementById("timeline-post-mini-image");
+var img = document.getElementById("timeline-post-mini-image-full-page");
 var images = document.getElementsByClassName('allPostImages');
 var modalImg = document.getElementById("img01");
 

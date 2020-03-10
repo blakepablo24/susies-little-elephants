@@ -174,6 +174,18 @@ class AdminController extends AbstractController
     }
 
     /**
+     * @Route("/timeline-post/{id}", name="timeline_post", methods={"GET","POST"})
+     */
+    public function timeLinePost(Post $post, Request $request)
+    {
+
+        return $this->render('admin/timeline-post.html.twig', [
+            'post' => $post
+        ]);
+
+    }
+
+    /**
      * @Route("/su/delete-post/{id}", name="delete_post")
      */
     public function deletePost(Post $post)

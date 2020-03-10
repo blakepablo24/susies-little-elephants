@@ -13,12 +13,28 @@
                 {{form_widget(form.content, {'attr': {'class': 'edit-family-form-field'}})}}
                 <div class="form-errors">{{form_errors(form.content)}}</div>
                 
-                {% if editPost.imageFileName == null %}
-                    {{form_widget(form.image, {'label': 'Upload New Image'})}}
+                {% if editPost.imageFileName == null %} 
+
+                    <div class="upload-btn-wrapper">
+                        <button class="btn">Upload an Image</button>
+                        {{form_widget(form.image, {'label': 'Upload New Image'})}}
+                        <div class="form-errors">{{form_errors(form.image)}}</div>
+                    </div>
                     <img  class="timeline-post-image" src="" alt="">
+
                 {% else %}
-                    {{form_widget(form.image, {'label': 'Upload a different image'})}}
-                    <img  class="timeline-post-image" src="{{asset('assets/img/posts/' ~ editPost.imageFileName)}}" alt="">
+                    
+                    <div class="current-uploaded-image">
+                        <p>Current Image</p>
+                        <img  class="timeline-post-image" src="{{asset('assets/img/posts/' ~ editPost.imageFileName)}}" alt="">
+                    </div>
+
+                    <div class="upload-btn-wrapper">
+                        <button class="btn">Edit Image</button>
+                        {{form_widget(form.image, {'label': 'Upload a different image'})}}
+                        <div class="form-errors">{{form_errors(form.image)}}</div>
+                    </div>
+                    
                 {% endif %}
 
                 <div class="form-errors">{{form_errors(form.image)}}</div>

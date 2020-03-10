@@ -57,7 +57,8 @@ a {
 
 .submit-button {
     margin-top: 10px;
-    width: 50%;
+    height: 7.5vh;
+    width: 75%;
     padding: 5px 0 5px 0;
     place-self: center center;
     border-radius: 15px;
@@ -75,6 +76,33 @@ a {
     border: none;
     box-shadow: 1px 5px 3px #464444;
 }
+
+/* Upload button */
+
+.upload-btn-wrapper {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    margin: 10px 0;
+  }
+  
+  .btn {
+    border: 2px solid gray;
+    color: gray;
+    background-color: white;
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  .upload-btn-wrapper input[type=file] {
+    font-size: 100px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+  }
 
 /* Pagination */
 
@@ -167,6 +195,12 @@ nav {
 
 .burger-menu-items-container a h3 {
     margin-bottom: 15px;
+}
+
+.fa-bars {
+    border: solid 1px #2b2b28;
+    padding: 7px 10px;
+    border-radius: 5px;
 }
 
 .closebtn {
@@ -280,6 +314,12 @@ main {
     font-size: 0.85rem;
 }
 
+.current-uploaded-image {
+    display: grid;
+    place-items: center center;
+    margin: 10px 0;
+}
+
 .form-success {
     place-self: center center;
     border: solid 1px #187a18;
@@ -294,18 +334,35 @@ main {
     margin: 10px 0;
 }
 
+.post-admin-buttons {
+    width: 95vw;
+    display: grid;
+    grid: 1fr / 1fr 1fr;
+    place-items: center center;
+    border-bottom: solid 1px  rgb(43, 43, 40);
+    border-left: solid 1px  rgb(43, 43, 40);
+    border-right: solid 1px  rgb(43, 43, 40);
+    padding: 10px 0;
+    margin-bottom: 35px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    background: rgb(70, 68, 68, 0.2);
+}
+
 /* Display posts on family page admin and parents */
 
 .timeline-post {
     display: grid;
     grid-column: 1fr;
     grid-template-rows: auto;
-    margin-bottom: 15px;
+    grid-row-gap: 10px;
     place-items: center center;
     width: 95vw;
-    border: solid 1px #2b2b28;
-    border-radius: 15px;
+    height: 25vh;
+    border: solid 1px rgb(43, 43, 40, 0.3);
     padding: 10px 0;
+    border-radius: 5px;
+    box-shadow: 1px 5px 3px #464444;
 }
 
 .timeline-post:first-of-type {
@@ -314,10 +371,10 @@ main {
 
 .timeline-post-headers {
     display: grid;
-    grid: 1fr 1fr / 1fr 1fr;
+    grid: 1fr / 1fr 1fr;
     width: 95%;
     place-items: center center;
-    margin-bottom: 10px;
+    color: rgb(57, 104, 206);
 }
 
 .timeline-post-headers h3 {
@@ -325,6 +382,7 @@ main {
 }
 
 .timeline-post-image-container {
+    grid-column: 1 / 3;
     display: grid;
     grid: 1fr / 1fr 1fr;
     place-items: center center;
@@ -332,8 +390,27 @@ main {
 }
 
 .timeline-post-image {
-    width: 30px;
-    height: 30px;
+    width: 22.5px;
+    height: 22.5px;
+    border-radius: 5px;
+}
+
+/* Display posts on family page admin and parents */
+
+.timeline-post-full-page {
+    display: grid;
+    grid-row-gap: 15px;
+    place-items: center center;
+    border: solid 1px rgb(43, 43, 40, 0.3);
+    border-radius: 5px;
+    width: 95vw;
+    padding: 15px 5px;
+    margin: 10px 0;
+}
+
+.timeline-post-image-full-page {
+    max-width: 30vw;
+    border-radius: 5px;
 }
 
 .timeline-post-contact {
@@ -342,8 +419,8 @@ main {
     border: 1px green solid;
     border-radius: 15px;
     padding: 10px;
-    grid-column: 1 / 3;
-    margin-top: 10px; 
+    margin-top: 10px;
+    width: 50%;
 }
 
 /* Timeline post enlarge image modal */
@@ -548,6 +625,10 @@ footer {
         width: 45vw;
     }
 
+    .post-admin-buttons {
+        width: 45vw;
+    }
+
     .timeline-post:first-of-type {
         margin-top: 0;
     }
@@ -618,6 +699,10 @@ footer {
     }
 
     .timeline-post {
+        width: 45vw;
+    }
+
+    .post-admin-buttons {
         width: 45vw;
     }
 
@@ -706,6 +791,10 @@ footer {
     }
 
     .timeline-post {
+        width: 30vw;
+    }
+
+    .post-admin-buttons {
         width: 30vw;
     }
 

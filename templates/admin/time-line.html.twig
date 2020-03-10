@@ -20,9 +20,12 @@
                     
                     {{ form_widget(form.content) }}
                     <div class="form-errors">{{form_errors(form.content)}}</div>
-
-                    {{form_widget(form.image, {'label': 'Upload New Image with post'})}}
-                    <div class="form-errors">{{form_errors(form.image)}}</div>
+                    
+                    <div class="upload-btn-wrapper">
+                        <button class="btn">Upload a file</button>
+                        {{form_widget(form.image)}}
+                        <div class="form-errors">{{form_errors(form.image)}}</div>
+                    </div>
 
                     {{ form_widget(form.save) }}
 
@@ -37,43 +40,54 @@
         {% endif %}
 
             {% else %}
-            <div class="timeline-post-container">
-                {% for post in pagination %}
-                <div class="timeline-post">
-                    <div class="timeline-post-headers">
-                        <h3>{{post.subject}}</h3>
-                        <h4>{{post.date|date('D-d-m-y')}}</h4>
-            
-                        {% if not is_granted('ROLE_ADMIN') %}
 
-                        {% else %}
-                            <a id="edit-family" href="{{path('edit_post', {'postname':post.subject|lower|slugify,'id':post.id})}}"><i class="fas fa-edit"></i></a>
-                            <a id="delete-family" onclick="return confirm('Are you sure you want to delete this post?')" href="{{path('delete_post', {'id':post.id})}}"><i class="fas fa-trash-alt"></i></a>                
-                        {% endif %}
-            
-                    </div>
+                <div class="timeline-post-container">
+                    {% for post in pagination %}
 
-                    <p>{{post.content}}</p>
-
-                    <div class="timeline-post-image-container">
-                        {% if post.imageFileName %}
-                            <h5>Attached Image</h5>
-                            <img  id="timeline-post-mini-image" class="timeline-post-image allPostImages" src="{{asset('assets/img/posts/' ~ post.imageFileName)|imagine_filter('downscale_filter')}}" alt="">
-                        {% endif %}
-
-
-                        {% if not is_granted('ROLE_ADMIN') %}
-
-                            <a class="timeline-post-contact" href=""><i class="far fa-envelope"></i><p>Contact Susie regarding this post</p></a>
+                    <div>
                     
+                        {% if post.imageFileName %}
+                        
+                            <a class="timeline-post" href="{{path('timeline_post', {'id':post.id})}}">
+                            
+                            {% else %}
+
+                            <a class="timeline-post" style="margin-bottom: 35px;" href="{{path('timeline_post', {'id':post.id})}}">
+                                
                         {% endif %}
+                                <div class="timeline-post-headers">
+                                    <h3>{{post.subject}}</h3>
+                                    <h4>{{post.date|date('D-d-m-y')}}</h4>
+                                </div>
+
+                                
+                                <p>{{post.content|u.truncate(20, '...')}}</p>
+
+                                
+                            </a>
+
+                        {% if post.imageFileName %}
+                            <div class="post-admin-buttons">
+                                <div class="timeline-post-image-container">
+                                            
+                                    <h5>Attached Image</h5>
+                                    <img  id="timeline-post-mini-image" class="timeline-post-image allPostImages" src="{{asset('assets/img/posts/' ~ post.imageFileName)|imagine_filter('downscale_filter')}}" alt="">
+
+                                </div>
+
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <a id="edit-family" href="{{path('edit_post', {'postname':post.subject|lower|slugify,'id':post.id})}}"><i class="fas fa-edit"></i></a>
+                                    <a id="delete-family" onclick="return confirm('Are you sure you want to delete this post?')" href="{{path('delete_post', {'id':post.id})}}"><i class="fas fa-trash-alt"></i></a>
+                                {% endif %}
+                                
+                            </div>
+                        {% endif %}
+
                     </div>
+
+                    {% endfor %}
 
                 </div>
-
-        {% endfor %}
-
-            </div>
 
         {% endif %}
 
