@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 
 class EditPostType extends AbstractType
 {
@@ -18,21 +19,19 @@ class EditPostType extends AbstractType
     {
         $builder
             ->add('subject', TextType::class, [
-                'label' => false,
+                'label' => 'subject',
                 'attr' => [
                     'class' => 'edit-family-form-field',
                     'placeholder' => 'Subject'
                 ],
             ])
 
-            ->add('content', TextareaType::class, [
+            ->add('content', CKEditorType::class, [
                 'label' => false,
-                'attr' => [
-                    'class' => 'edit-family-form-field',
-                    'placeholder' => 'PostDetails',
-                    'cols' => '30',
-                    'rows' => '10'
-                ],
+                'config' => array(
+                    'uiColor' => '#ffffff',
+                    'toolbar' => 'basic'
+                ),
             ])
 
             ->add('image', FileType::class, [

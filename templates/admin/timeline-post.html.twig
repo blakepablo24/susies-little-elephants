@@ -6,11 +6,18 @@
         
         <div class="timeline-post-full-page">
 
+            {% if is_granted('ROLE_ADMIN') %}
+                <div class="timeline-post-full-page-admin-section">
+                    <a id="edit-family" href="{{path('edit_post', {'postname':post.subject|lower|slugify,'id':post.id})}}"><i class="fas fa-edit"></i></a>
+                    <a id="delete-family" onclick="return confirm('Are you sure you want to delete this post?')" href="{{path('delete_post', {'id':post.id})}}"><i class="fas fa-trash-alt"></i></a>
+                </div>
+            {% endif %}
+
             <h2>{{post.subject}}</h2>
 
             <h4>{{post.date|date('D-d-m-y')}}</h4>
 
-            <p>{{post.content}}</p>
+            {{post.content|raw}}
 
             {% if post.imageFileName %}
                                                 
@@ -20,11 +27,6 @@
 
                     <a class="timeline-post-contact" href=""><i class="far fa-envelope"></i><p>Contact Susie regarding this post</p></a>
             
-                {% endif %}
-
-                {% if is_granted('ROLE_ADMIN') %}
-                    <a id="edit-family" href="{{path('edit_post', {'postname':post.subject|lower|slugify,'id':post.id})}}"><i class="fas fa-edit"></i></a>
-                    <a id="delete-family" onclick="return confirm('Are you sure you want to delete this post?')" href="{{path('delete_post', {'id':post.id})}}"><i class="fas fa-trash-alt"></i></a>
                 {% endif %}
                     
             {% endif %}

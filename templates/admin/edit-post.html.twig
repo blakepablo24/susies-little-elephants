@@ -7,10 +7,11 @@
         <h2 class="main-title">Edit Post</h2>
 
        {{form_start(form, {'attr': {'novalidate':'novalidate', 'class': 'edit-family-form'}})}}
-                {{form_widget(form.subject, {'attr': {'class': 'edit-family-form-field'}})}}
+       
+                {{form_widget(form.subject, {'attr': {'class': 'edit-family-form-field above-ckeditor'}})}}
                 <div class="form-errors">{{form_errors(form.subject)}}</div>
 
-                {{form_widget(form.content, {'attr': {'class': 'edit-family-form-field'}})}}
+                {{form_widget(form.content)}}
                 <div class="form-errors">{{form_errors(form.content)}}</div>
                 
                 {% if editPost.imageFileName == null %} 

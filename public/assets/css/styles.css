@@ -24,7 +24,7 @@ body {
         font-family: 'Indie Flower', cursive;
 }
 
-p, .form-errors {
+p, .form-errors, ul, li {
     font-family: 'Open Sans', sans-serif;
 }
 
@@ -69,12 +69,12 @@ a {
 .tab-button {
     color: #2b2b28;
     margin: 5px 0;
-    width: 47.5vw;
+    width: 99%;
     place-self: center center;
     padding: 5px 0 5px 0;
-    border-radius: 7.5px;
+    border-radius: 5px;
     border: none;
-    box-shadow: 1px 5px 3px #464444;
+    box-shadow: 1.5px 3px 1.5px #464444;
 }
 
 /* Upload button */
@@ -115,14 +115,6 @@ a {
     font-size: 2rem;
     font-weight: bold;
     padding: 2px;
-}
-
-.first {
-
-}
-
-.page {
-
 }
 
 .current, .first, .last, .next, .previous, .page {
@@ -309,6 +301,10 @@ main {
     margin: 10px 10px 0 10px;
 }
 
+.above-ckeditor {
+    margin-bottom: 20px;
+}
+
 .form-errors {
     color: red;
     font-size: 0.85rem;
@@ -395,7 +391,7 @@ main {
     border-radius: 5px;
 }
 
-/* Display posts on family page admin and parents */
+/* Display full posts on family page admin and parents */
 
 .timeline-post-full-page {
     display: grid;
@@ -421,6 +417,13 @@ main {
     padding: 10px;
     margin-top: 10px;
     width: 50%;
+}
+
+.timeline-post-full-page-admin-section {
+    display: grid;
+    grid: 1fr / 1fr 1fr;
+    width: 100%;
+    place-items: center center;
 }
 
 /* Timeline post enlarge image modal */

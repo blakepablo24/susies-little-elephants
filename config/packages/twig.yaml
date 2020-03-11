@@ -3,3 +3,6 @@ twig:
 
     paths:
         '%kernel.project_dir%/public/assets/img/front-page-images': images
+    
+    form_themes:
+        - '@FOSCKEditor/Form/ckeditor_widget.html.twig'
