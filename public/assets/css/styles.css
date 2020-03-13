@@ -24,13 +24,19 @@ body {
         font-family: 'Indie Flower', cursive;
 }
 
-p, .form-errors, ul, li {
+p, .form-errors, ul, li, .go-back-page {
     font-family: 'Open Sans', sans-serif;
 }
 
 a {
     text-decoration: none;
     color: #2b2b28;
+}
+
+.go-back-page {
+    place-self: center start;
+    margin: 5px 0;
+    color: rgb(61, 117, 221);
 }
 
 /* Site Buttons */
@@ -347,6 +353,8 @@ main {
 
 /* Display posts on family page admin and parents */
 
+
+
 .timeline-post {
     display: grid;
     grid-column: 1fr;
@@ -359,10 +367,6 @@ main {
     padding: 10px 0;
     border-radius: 5px;
     box-shadow: 1px 5px 3px #464444;
-}
-
-.timeline-post:first-of-type {
-    margin-top: 15px;
 }
 
 .timeline-post-headers {
@@ -405,7 +409,7 @@ main {
 }
 
 .timeline-post-image-full-page {
-    max-width: 30vw;
+    width:10%;
     border-radius: 5px;
 }
 
@@ -447,7 +451,7 @@ main {
   }
 
 .enlarge-image-modal-image {
-    width: 95%;
+    max-width: 95%;
     border-radius: 7px;
     max-width: 95vw;
     max-height: 90vh; 
@@ -622,6 +626,7 @@ footer {
         display: grid;
         grid: auto / 1fr 1fr;
         grid-column-gap: 2vw;
+        margin-top: 25px;
     }
 
     .timeline-post {
@@ -833,6 +838,14 @@ footer {
 
     nav {
         grid: 1fr / 7fr 1fr 1fr;
+    }
+
+    main {
+        grid-area: main;
+        place-self: center center;
+        display: grid;
+        grid: auto / 50vw;
+        place-items: center center;
     }
 
     /* Hide Mobile Menu */

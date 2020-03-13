@@ -47,6 +47,11 @@ class Post
      */
     private $imageFileName;
 
+    /**
+     * @ORM\Column(type="time")
+     */
+    private $Time;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -108,6 +113,18 @@ class Post
     public function setImageFileName(string $imageFileName): self
     {
         $this->imageFileName = $imageFileName;
+
+        return $this;
+    }
+
+    public function getTime(): ?\DateTimeInterface
+    {
+        return $this->Time;
+    }
+
+    public function setTime(\DateTimeInterface $Time): self
+    {
+        $this->Time = $Time;
 
         return $this;
     }

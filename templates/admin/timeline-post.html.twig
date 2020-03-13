@@ -3,12 +3,14 @@
 {% block main %}
 
     <main>
+
+    <a class="go-back-page" href="{{path('admin_time_line', {'id':child.id})}}"><i class="fas fa-long-arrow-alt-left"></i> Back to {{child.name}}'s Timeline</a>
         
         <div class="timeline-post-full-page">
 
             {% if is_granted('ROLE_ADMIN') %}
                 <div class="timeline-post-full-page-admin-section">
-                    <a id="edit-family" href="{{path('edit_post', {'postname':post.subject|lower|slugify,'id':post.id})}}"><i class="fas fa-edit"></i></a>
+                    <a id="edit-family" href="{{path('edit_post', {'id':post.id})}}"><i class="fas fa-edit"></i></a>
                     <a id="delete-family" onclick="return confirm('Are you sure you want to delete this post?')" href="{{path('delete_post', {'id':post.id})}}"><i class="fas fa-trash-alt"></i></a>
                 </div>
             {% endif %}

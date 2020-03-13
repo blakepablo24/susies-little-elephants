@@ -55,3 +55,27 @@ function openTab(evt, tabName) {
     document.getElementById(tabName).style.display = "grid";
     evt.currentTarget.className += " selected";
   }
+
+// Latest post on time line notification
+
+  var elements = document.getElementsByClassName('timeline-post');
+  var requiredElement = elements[0];
+
+  requiredElement.style.border = "2px solid #11bcbf";
+
+  var newItem = document.createElement("P");
+  var textnode = document.createTextNode("LATEST POST");
+
+  newItem.style.border = "2px solid #11bcbf";
+  newItem.style.backgroundColor = "#f5ef42";
+  newItem.style.color = "#11bcbf";
+  newItem.style.borderRadius = "5px";
+  newItem.style.padding = "3px";
+  newItem.style.marginLeft = "5px";
+  newItem.style.width = "50%";
+  newItem.style.placeSelf = "center start";
+  newItem.style.fontSize = "1.5rem";
+  
+  newItem.appendChild(textnode);
+
+  requiredElement.appendChild(newItem);

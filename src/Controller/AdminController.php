@@ -113,12 +113,12 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/time-line/{childname}, {id}", name="admin_time_line", methods={"GET","POST"})
+     * @Route("/time-line/{id}", name="admin_time_line", methods={"GET","POST"})
      */
-    public function timeLine($id, Child $child, PaginatorInterface $paginator, Request $request)
+    public function timeLine(Child $child, PaginatorInterface $paginator, Request $request)
     {   
 
-        $childs_posts = $this->getDoctrine()->getRepository(Post::class)->findPostsByChildId($id);
+        $childs_posts = $this->getDoctrine()->getRepository(Post::class)->findPostsByChildId($child->getId());
 
         $pagination = $paginator->paginate(
             $childs_posts, /* query NOT result */
@@ -158,12 +158,16 @@ class AdminController extends AbstractController
             $newPost->setSubject($request->request->get('add_post')['subject']);
             $newPost->setContent($request->request->get('add_post')['content']);
             $newPost->setDate(new \DateTime());
+            $newPost->setTime(new \DateTime());
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($newPost);
             $entityManager->flush();
 
-            return $this->redirectToRoute('admin_main_page');
+            $this->addFlash('post_added', 'Post Successfully Added');
+
+            return $this->redirectToRoute('admin_time_line', ['id' => $child->getId()]);
+
         }
 
         return $this->render('admin/time-line.html.twig', [
@@ -178,9 +182,11 @@ class AdminController extends AbstractController
      */
     public function timeLinePost(Post $post, Request $request)
     {
+        $child = $post->getChild();
 
         return $this->render('admin/timeline-post.html.twig', [
-            'post' => $post
+            'post' => $post,
+            'child' => $child
         ]);
 
     }
@@ -200,7 +206,7 @@ class AdminController extends AbstractController
         $entityManager->remove($post);
         $entityManager->flush();
 
-        return $this->redirectToRoute('admin_main_page');
+        return $this->redirectToRoute('admin_time_line', ['id' => $post->getChild()->getId()]);
     }
 
     /**
@@ -211,6 +217,8 @@ class AdminController extends AbstractController
 
         $form = $this->createForm(EditPostType::class, $editPost);
         $form->handleRequest($request);
+
+        $child = $editPost->getChild();
 
         if($form->isSubmitted() && $form->isValid())
         {
@@ -240,13 +248,21 @@ class AdminController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($editPost);
             $entityManager->flush();
+            
+            $this->addFlash('post_updated', 'Post Successfully Updated');
 
-            return $this->redirectToRoute('admin_main_page');
+            return $this->render('admin/edit-post.html.twig', [
+                'form' => $form->createView(),
+                'editPost' => $editPost,
+                'child' => $child
+            ]);
+
         }
 
         return $this->render('admin/edit-post.html.twig', [
             'form' => $form->createView(),
-            'editPost' => $editPost
+            'editPost' => $editPost,
+            'child' => $child
         ]);
     }
 

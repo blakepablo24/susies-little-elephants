@@ -30,7 +30,7 @@ class PostRepository extends ServiceEntityRepository
             'SELECT p
             FROM App\Entity\Post p
             WHERE p.child = :child_id
-            ORDER BY p.date DESC'
+            ORDER BY p.date DESC, p.Time DESC'
         )->setParameter('child_id', $child_id);
 
         // returns an array of Product objects

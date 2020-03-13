@@ -3,8 +3,16 @@
 {% block main %}
 
     <main>
-        
+
+        <a class="go-back-page" href="{{path('admin_time_line', {'id':child.id})}}"><i class="fas fa-long-arrow-alt-left"></i> Back to {{child.name}}'s Timeline</a>
+
         <h2 class="main-title">Edit Post</h2>
+
+        {% for message in app.flashes('post_updated') %}
+            <div class="form-success">
+                {{ message }}
+            </div>
+        {% endfor %}
 
        {{form_start(form, {'attr': {'novalidate':'novalidate', 'class': 'edit-family-form'}})}}
        
@@ -27,7 +35,7 @@
                     
                     <div class="current-uploaded-image">
                         <p>Current Image</p>
-                        <img  class="timeline-post-image" src="{{asset('assets/img/posts/' ~ editPost.imageFileName)}}" alt="">
+                        <img  class="timeline-post-image" src="{{asset('assets/img/posts/' ~ editPost.imageFileName)|imagine_filter('downscale_filter')}}" alt="">
                     </div>
 
                     <div class="upload-btn-wrapper">
