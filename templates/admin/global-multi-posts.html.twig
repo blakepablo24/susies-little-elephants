@@ -1,0 +1,13 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block main %}
+
+    <main>
+
+        <h1 class="main-title">Group Posts</h1>
+
+        {{render(controller("App\\Controller\\AdminController::globalPosts"))}}
+
+    </main>
+
+{% endblock %}

@@ -1,3 +1,4 @@
-        {% for child in specific_family_child %}
-                <a class="time-line-link-title" href="{{path('admin_time_line', {'childname':child.name|lower|slugify,'id':child.id})}}">{{child.name}}</a>
-        {% endfor %}
+{% for child in specific_family_child %}
+        <a class="time-line-link-title" href="{{path('admin_time_line', {'childname':child.name|lower|slugify,'id':child.id})}}">{{child.name}}</a>
+{% endfor %}
+        <a class="time-line-link-title" href="{{path('global_multi_posts')}}">Group Posts</a>

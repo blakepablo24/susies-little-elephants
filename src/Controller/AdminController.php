@@ -9,6 +9,8 @@ use App\Form\NewUserType;
 use App\Form\EditFamilyType;
 use App\Form\AddChildType;
 use App\Form\AddPostType;
+use App\Form\AddGlobalPostType;
+use App\Form\EditGlobalPostType;
 use App\Form\EditPostType;
 use App\Form\ResetPasswordType;
 use App\Form\NewPolicyType;
@@ -18,6 +20,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use App\Entity\Family;
 use App\Entity\Child;
 use App\Entity\Post;
+use App\Entity\GlobalPost;
 use App\Entity\User;
 use App\Entity\Policy;
 use Symfony\Component\Filesystem\Filesystem;
@@ -444,6 +447,146 @@ class AdminController extends AbstractController
         return $this->redirectToRoute('admin_main_page');
     }
 
+    /**
+     * @Route("/su/global-post", name="global_post", methods={"GET","POST"})
+     */
+    public function globalPost(Request $request)
+    {
+
+        $newGlobalPost = new GlobalPost();
+        $form = $this->createForm(AddGlobalPostType::class, $newGlobalPost);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid())
+        {
+            
+            $imageFile = $form->get('image')->getData();
+            
+
+            if($imageFile)
+            {
+
+                $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $newFilename = $originalFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
+
+                try {
+                    $imageFile->move(
+                        $this->getParameter('post_image_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                }
+    
+                $newGlobalPost->setImageFilename($newFilename);
+            }
+
+            $newGlobalPost->setSubject($request->request->get('add_global_post')['subject']);
+            $newGlobalPost->setContent($request->request->get('add_global_post')['content']);
+            $newGlobalPost->setDate(new \DateTime());
+            $newGlobalPost->setTime(new \DateTime());
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($newGlobalPost);
+            $entityManager->flush();
+
+            $this->addFlash('post_added', 'Global Post Successfully Added');
+
+            return $this->redirectToRoute('admin_main_page');
+
+        }
+
+        return $this->render('admin/global-post.html.twig', [
+        'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/su/edit-global-post/{id}", name="edit_global_post", methods={"GET","POST"})
+     */
+    public function editGlobalPost(GlobalPost $editGlobalPost, Request $request)
+    {
+
+        $form = $this->createForm(EditGlobalPostType::class, $editGlobalPost);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid())
+        {
+
+            $editGlobalPost->setSubject($request->request->get('edit_post')['subject']);
+            $editGlobalPost->setContent($request->request->get('edit_post')['content']);
+
+            $imageFile = $form->get('image')->getData();
+
+            if($imageFile)
+            {
+                $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $newFilename = $originalFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
+
+                try {
+                    $imageFile->move(
+                        $this->getParameter('post_image_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                }
+    
+                $editGlobalPost->setImageFilename($newFilename);
+            }
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($editGlobalPost);
+            $entityManager->flush();
+            
+            $this->addFlash('post_updated', 'Global Post Successfully Updated');
+
+            return $this->redirectToRoute('admin-main-page');
+
+        }
+
+        return $this->render('admin/edit-global-post.html.twig', [
+            'form' => $form->createView(),
+            'editGlobalPost' => $editGlobalPost,
+        ]);
+    }
+
+    /**
+     * @Route("/su/delete-global-post/{id}", name="delete_global_post")
+     */
+    public function deleteGlobalPost(GlobalPost $global_post)
+    {
+        $image = $global_post->getImageFileName();
+        $path=$this->getParameter('post_image_directory').'/'.$image;
+
+        $fs = new FileSystem();
+        $fs->remove(array($path));
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($global_post);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('admin_main_page');
+    }
+
+    /**
+     * @Route("/global-single-post/{id}", name="global_single_post", methods={"GET","POST"})
+     */
+    public function globalSinglePost(GlobalPost $globalPost, Request $request)
+    {
+        return $this->render('admin/global-single-post.html.twig', [
+            'post' => $globalPost
+        ]);
+    }
+
+    /**
+     * @Route("/global-multi-posts", name="global_multi_posts", methods={"GET","POST"})
+     */
+    public function globalMultiPosts()
+    {
+        return $this->render('admin/global-multi-posts.html.twig');
+    }
+
     // Functions
 
     public function families()
@@ -464,6 +607,24 @@ class AdminController extends AbstractController
         return $this->render('admin/includes/_policies.html.twig', [
             'policies'=>$policies
             ]);
+
+    }
+
+    public function globalPosts(Request $request, PaginatorInterface $paginator)
+    {
+        $global_posts = $this->getDoctrine()
+        ->getRepository(GlobalPost::class)
+        ->findAllGlobalPosts();
+        
+        $pagination = $paginator->paginate(
+            $global_posts, /* query NOT result */
+            $request->query->getInt('page', 1), /*page number*/
+            6 /*limit per page*/
+        );
+
+        return $this->render('admin/includes/_global_posts.html.twig', [
+            'pagination' => $pagination
+        ]);
 
     }
 
