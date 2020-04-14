@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -55,6 +57,22 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=45)
      */
     private $last_name;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="user_id")
+     */
+    private $comments;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\GlobalPostComment", mappedBy="User")
+     */
+    private $globalPostComments;
+
+    public function __construct()
+    {
+        $this->comments = new ArrayCollection();
+        $this->globalPostComments = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -154,6 +172,68 @@ class User implements UserInterface
     public function setLastName(string $last_name): self
     {
         $this->last_name = $last_name;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Comment[]
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        if ($this->comments->contains($comment)) {
+            $this->comments->removeElement($comment);
+            // set the owning side to null (unless already changed)
+            if ($comment->getUserId() === $this) {
+                $comment->setUserId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|GlobalPostComment[]
+     */
+    public function getGlobalPostComments(): Collection
+    {
+        return $this->globalPostComments;
+    }
+
+    public function addGlobalPostComment(GlobalPostComment $globalPostComment): self
+    {
+        if (!$this->globalPostComments->contains($globalPostComment)) {
+            $this->globalPostComments[] = $globalPostComment;
+            $globalPostComment->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGlobalPostComment(GlobalPostComment $globalPostComment): self
+    {
+        if ($this->globalPostComments->contains($globalPostComment)) {
+            $this->globalPostComments->removeElement($globalPostComment);
+            // set the owning side to null (unless already changed)
+            if ($globalPostComment->getUser() === $this) {
+                $globalPostComment->setUser(null);
+            }
+        }
 
         return $this;
     }

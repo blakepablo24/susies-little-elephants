@@ -26,9 +26,9 @@
         {% block header %}{% endblock %}
 
         {% block menu %}
-            <header>
+            <header style="display: none;">
 
-                <img width="" src="" alt="">
+                <img class="header-image" src="{{asset('assets/img/front-page-images/sle-logo.png')}}" alt="">
 
             {% if not is_granted('ROLE_ADMIN') %}
 
@@ -44,6 +44,7 @@
 
             </header>
             <nav>
+            <div class="nav-container-for-fixed-menu">
                 
                 {# Burger menu #}
 
@@ -72,9 +73,10 @@
                     {% endif %}
                 </div>
                 <div>
-                    <a class="login-container" href="{{path('logout')}}"><i class="fas fa-user-alt"></i><h4>Logout {{app.user.name}}</h4></a>
+                    <a class="login-container" href="{{path('logout')}}"><i class="fas fa-user-alt"></i><h4>Logout</h4></a>
 
                 </div>
+            </div>
             </nav>
             <div id="burger-menu" class="burger-navigation-menu-container">
                 <div class="burger-navigation-menu">

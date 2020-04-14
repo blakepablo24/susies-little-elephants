@@ -1,0 +1,33 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block main %}
+
+    <main>
+        
+        <h2 class="main-title">Add New Global Post</h2>
+
+            {% if is_granted('ROLE_ADMIN') %}
+
+            {{form_start(form, {'attr': {'novalidate':'novalidate', 'class': 'edit-family-form'}})}}
+                    
+                    {{form_widget(form.subject, {'attr': {'class': 'edit-family-form-field above-ckeditor'}})}}
+                    <div class="form-errors">{{form_errors(form.subject)}}</div>
+                    
+                    {{ form_widget(form.content) }}
+                    <div class="form-errors">{{form_errors(form.content)}}</div>
+                    
+                    <div class="upload-btn-wrapper">
+                        <button class="btn">Upload a file</button>
+                        {{form_widget(form.image)}}
+                        <div class="form-errors">{{form_errors(form.image)}}</div>
+                    </div>
+
+                    {{ form_widget(form.save) }}
+
+            {{form_end(form)}}
+
+        {% endif %}
+
+    </main>
+
+{% endblock %}

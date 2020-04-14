@@ -22,10 +22,14 @@
             <button class="tab-button tablink" onclick="openTab(event,'Policies')">
                 <h1 class="main-title">Policies</h1>
             </button>
+            <button class="tab-button tablink" onclick="openTab(event,'Global-Posts')">
+                <h1 class="main-title">Global Posts</h1>
+            </button>
         </div>
 
                 {{render(controller("App\\Controller\\AdminController::families"))}}
                 {{render(controller("App\\Controller\\AdminController::policies"))}}
+                {{render(controller("App\\Controller\\AdminController::globalPosts"))}}
 
         {% endif %}
     </main>

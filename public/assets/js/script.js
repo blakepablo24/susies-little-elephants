@@ -42,6 +42,8 @@ span.onclick = function() {
   modal.style.display = "none";
 }
 
+// index admin area tabs
+
 function openTab(evt, tabName) {
     var i, x, tablinks;
     x = document.getElementsByClassName("tab");

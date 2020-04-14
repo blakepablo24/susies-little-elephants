@@ -9,6 +9,10 @@ use App\Form\NewUserType;
 use App\Form\EditFamilyType;
 use App\Form\AddChildType;
 use App\Form\AddPostType;
+use App\Form\AddCommentType;
+use App\Form\AddGlobalPostCommentType;
+use App\Form\AddGlobalPostType;
+use App\Form\EditGlobalPostType;
 use App\Form\EditPostType;
 use App\Form\ResetPasswordType;
 use App\Form\NewPolicyType;
@@ -18,8 +22,11 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use App\Entity\Family;
 use App\Entity\Child;
 use App\Entity\Post;
+use App\Entity\GlobalPost;
 use App\Entity\User;
 use App\Entity\Policy;
+use App\Entity\Comment;
+use App\Entity\GlobalPostComment;
 use Symfony\Component\Filesystem\Filesystem;
 use Intervention\Image\ImageManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -118,63 +125,77 @@ class AdminController extends AbstractController
     public function timeLine(Child $child, PaginatorInterface $paginator, Request $request)
     {   
 
-        $childs_posts = $this->getDoctrine()->getRepository(Post::class)->findPostsByChildId($child->getId());
+        $specificChildUserId = $child->getFamily()->getUser()->getId();
+        $user_id = $this->getUser()->getId();
 
-        $pagination = $paginator->paginate(
-            $childs_posts, /* query NOT result */
-            $request->query->getInt('page', 1), /*page number*/
-            6 /*limit per page*/
-        );
+        // check if user is allowed to see childs timeline
 
-        $newPost = new Post();
-        $form = $this->createForm(AddPostType::class, $newPost);
-        $form->handleRequest($request);
-
-        if($form->isSubmitted() && $form->isValid())
+        if ($specificChildUserId == $user_id || $this->getUser()->getRoles()[0] == "ROLE_ADMIN")
         {
-            
-            $imageFile = $form->get('image')->getData();
-            
+            $childs_posts = $this->getDoctrine()->getRepository(Post::class)->findPostsByChildId($child->getId());
 
-            if($imageFile)
+            $pagination = $paginator->paginate(
+                $childs_posts, /* query NOT result */
+                $request->query->getInt('page', 1), /*page number*/
+                6 /*limit per page*/
+            );
+
+            $newPost = new Post();
+            $form = $this->createForm(AddPostType::class, $newPost);
+            $form->handleRequest($request);
+
+            if($form->isSubmitted() && $form->isValid())
             {
+                
+                $imageFile = $form->get('image')->getData();
+                
 
-                $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
-                $newFilename = $originalFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
+                if($imageFile)
+                {
 
-                try {
-                    $imageFile->move(
-                        $this->getParameter('post_image_directory'),
-                        $newFilename
-                    );
-                } catch (FileException $e) {
-                    // ... handle exception if something happens during file upload
+                    $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+                    $newFilename = $originalFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
+
+                    try {
+                        $imageFile->move(
+                            $this->getParameter('post_image_directory'),
+                            $newFilename
+                        );
+                    } catch (FileException $e) {
+                        // ... handle exception if something happens during file upload
+                    }
+        
+                    $newPost->setImageFilename($newFilename);
                 }
-    
-                $newPost->setImageFilename($newFilename);
+
+                $newPost->setChild($child);
+                $newPost->setSubject($request->request->get('add_post')['subject']);
+                $newPost->setContent($request->request->get('add_post')['content']);
+                $newPost->setDate(new \DateTime());
+                $newPost->setTime(new \DateTime());
+
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($newPost);
+                $entityManager->flush();
+
+                $this->addFlash('post_added', 'Post Successfully Added');
+
+                return $this->redirectToRoute('admin_time_line', ['id' => $child->getId()]);
+
             }
 
-            $newPost->setChild($child);
-            $newPost->setSubject($request->request->get('add_post')['subject']);
-            $newPost->setContent($request->request->get('add_post')['content']);
-            $newPost->setDate(new \DateTime());
-            $newPost->setTime(new \DateTime());
-
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($newPost);
-            $entityManager->flush();
-
-            $this->addFlash('post_added', 'Post Successfully Added');
-
-            return $this->redirectToRoute('admin_time_line', ['id' => $child->getId()]);
-
+            return $this->render('admin/time-line.html.twig', [
+            'child' => $child,
+            'pagination' => $pagination,
+            'form' => $form->createView()
+            ]);
         }
 
-        return $this->render('admin/time-line.html.twig', [
-        'child' => $child,
-        'pagination' => $pagination,
-        'form' => $form->createView()
-        ]);
+        else
+        // if user is no allowed to see the page redirect to main admin page
+        {
+            return $this->redirectToRoute('admin_main_page');
+        }
     }
 
     /**
@@ -182,12 +203,55 @@ class AdminController extends AbstractController
      */
     public function timeLinePost(Post $post, Request $request)
     {
-        $child = $post->getChild();
+        // check if user is allowed to see childs timeline
+        
+        $specificChildUserId = $post->getChild()->getFamily()->getUser()->getId();
+        $user_id = $this->getUser()->getId();
 
-        return $this->render('admin/timeline-post.html.twig', [
-            'post' => $post,
-            'child' => $child
-        ]);
+        if ($specificChildUserId == $user_id || $this->getUser()->getRoles()[0] == "ROLE_ADMIN")
+        {
+            
+            $child = $post->getChild();
+
+            $user = $this->getUser();
+
+            $comments = $this->getDoctrine()->getRepository(Comment::class)->findCommentsByPostId($post->getId());
+
+            $comment = new Comment;
+            $form = $this->createForm(AddCommentType::class, $comment);
+            $form->handleRequest($request);
+
+            if($form->isSubmitted() && $form->isValid())
+            {
+
+                $comment->setPost($post);
+                $comment->setUser($user);
+                $comment->setContent($request->request->get('add_comment')['content']);
+                $comment->setDate(new \DateTime());
+                $comment->setTime(new \DateTime());
+
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($comment);
+                $entityManager->flush();
+                
+                $this->addFlash('comment_added', 'Comment Sucessfully added. Thank You');
+
+                return $this->redirectToRoute('timeline_post', ['id' => $post->getId()]);
+
+            }
+
+            return $this->render('admin/timeline-post.html.twig', [
+                'form' => $form->createView(),
+                'post' => $post,
+                'child' => $child,
+                'comments' => $comments
+            ]);
+        }
+        else
+        // if user is no allowed to see the page redirect to main admin page
+        {
+            return $this->redirectToRoute('admin_main_page');
+        }    
 
     }
 
@@ -444,6 +508,176 @@ class AdminController extends AbstractController
         return $this->redirectToRoute('admin_main_page');
     }
 
+    /**
+     * @Route("/su/global-post", name="global_post", methods={"GET","POST"})
+     */
+    public function globalPost(Request $request)
+    {
+
+        $newGlobalPost = new GlobalPost();
+        $form = $this->createForm(AddGlobalPostType::class, $newGlobalPost);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid())
+        {
+            
+            $imageFile = $form->get('image')->getData();
+            
+
+            if($imageFile)
+            {
+
+                $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $newFilename = $originalFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
+
+                try {
+                    $imageFile->move(
+                        $this->getParameter('post_image_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                }
+    
+                $newGlobalPost->setImageFilename($newFilename);
+            }
+
+            $newGlobalPost->setSubject($request->request->get('add_global_post')['subject']);
+            $newGlobalPost->setContent($request->request->get('add_global_post')['content']);
+            $newGlobalPost->setDate(new \DateTime());
+            $newGlobalPost->setTime(new \DateTime());
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($newGlobalPost);
+            $entityManager->flush();
+
+            $this->addFlash('post_added', 'Global Post Successfully Added');
+
+            return $this->redirectToRoute('admin_main_page');
+
+        }
+
+        return $this->render('admin/global-post.html.twig', [
+        'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/su/edit-global-post/{id}", name="edit_global_post", methods={"GET","POST"})
+     */
+    public function editGlobalPost(GlobalPost $editGlobalPost, Request $request)
+    {
+
+        $form = $this->createForm(EditGlobalPostType::class, $editGlobalPost);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid())
+        {
+
+            $editGlobalPost->setSubject($request->request->get('edit_post')['subject']);
+            $editGlobalPost->setContent($request->request->get('edit_post')['content']);
+
+            $imageFile = $form->get('image')->getData();
+
+            if($imageFile)
+            {
+                $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $newFilename = $originalFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
+
+                try {
+                    $imageFile->move(
+                        $this->getParameter('post_image_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                }
+    
+                $editGlobalPost->setImageFilename($newFilename);
+            }
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($editGlobalPost);
+            $entityManager->flush();
+            
+            $this->addFlash('post_updated', 'Global Post Successfully Updated');
+
+            return $this->redirectToRoute('admin-main-page');
+
+        }
+
+        return $this->render('admin/edit-global-post.html.twig', [
+            'form' => $form->createView(),
+            'editGlobalPost' => $editGlobalPost,
+        ]);
+    }
+
+    /**
+     * @Route("/su/delete-global-post/{id}", name="delete_global_post")
+     */
+    public function deleteGlobalPost(GlobalPost $global_post)
+    {
+        $image = $global_post->getImageFileName();
+        $path=$this->getParameter('post_image_directory').'/'.$image;
+
+        $fs = new FileSystem();
+        $fs->remove(array($path));
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($global_post);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('admin_main_page');
+    }
+
+    /**
+     * @Route("/global-single-post/{id}", name="global_single_post", methods={"GET","POST"})
+     */
+    public function globalSinglePost(GlobalPost $globalPost, Request $request)
+    {
+
+        $user = $this->getUser();
+
+        $comments = $this->getDoctrine()->getRepository(GlobalPostComment::class)->findCommentsByPostId($globalPost->getId());
+
+        $comment = new GlobalPostComment;
+        $form = $this->createForm(AddGlobalPostCommentType::class, $comment);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid())
+        {
+
+            $comment->setGlobalPost($globalPost);
+            $comment->setUser($user);
+            $comment->setContent($request->request->get('add_global_post_comment')['content']);
+            $comment->setDate(new \DateTime());
+            $comment->setTime(new \DateTime());
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($comment);
+            $entityManager->flush();
+            
+            $this->addFlash('comment_added', 'Comment Sucessfully added. Thank You');
+
+            return $this->redirectToRoute('global_single_post', ['id' => $globalPost->getId()]);
+
+        }
+
+        return $this->render('admin/global-single-post.html.twig', [
+            'form' => $form->createView(),
+            'post' => $globalPost,
+            'comments' => $comments
+        ]);
+    }
+
+    /**
+     * @Route("/global-multi-posts", name="global_multi_posts", methods={"GET","POST"})
+     */
+    public function globalMultiPosts()
+    {
+        return $this->render('admin/global-multi-posts.html.twig');
+    }
+
     // Functions
 
     public function families()
@@ -464,6 +698,24 @@ class AdminController extends AbstractController
         return $this->render('admin/includes/_policies.html.twig', [
             'policies'=>$policies
             ]);
+
+    }
+
+    public function globalPosts(Request $request, PaginatorInterface $paginator)
+    {
+        $global_posts = $this->getDoctrine()
+        ->getRepository(GlobalPost::class)
+        ->findAllGlobalPosts();
+        
+        $pagination = $paginator->paginate(
+            $global_posts, /* query NOT result */
+            $request->query->getInt('page', 1), /*page number*/
+            6 /*limit per page*/
+        );
+
+        return $this->render('admin/includes/_global_posts.html.twig', [
+            'pagination' => $pagination
+        ]);
 
     }
 

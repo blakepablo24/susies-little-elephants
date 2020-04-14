@@ -15,7 +15,7 @@ body {
     height: 100%;
     display: grid;
     grid: 
-        'header header' 10vh
+        'header header'
         'nav nav' 12vh
         'main main' 1fr
         'footer footer' 12vh
@@ -33,6 +33,10 @@ a {
     color: #2b2b28;
 }
 
+.nav-container-for-fixed-menu, footer {
+    background: #C9A0DC;
+}
+
 .go-back-page {
     place-self: center start;
     margin: 5px 0;
@@ -41,34 +45,28 @@ a {
 
 /* Site Buttons */
 
+.add-new-button, .add-new-post-button, .submit-button, .tab-button {
+    padding: 15px;
+    border: none;
+    border-radius: 15px;
+}
+
 .add-new-button {
     color: #2b2b28;
     margin: 15px 0;
-    width: 75vw;
-    padding: 15px 0 15px 0;
-    border-radius: 15px;
-    border: none;
     background-color: #a7e9af;
 }
 
 .add-new-post-button {
     color: #2b2b28;
     margin: 15px 0;
-    width: 75vw;
-    padding: 15px 0 15px 0;
-    border-radius: 15px;
-    border: none;
     background-color: #a7e9af;
 }
 
 .submit-button {
     margin-top: 10px;
     height: 7.5vh;
-    width: 75%;
-    padding: 5px 0 5px 0;
     place-self: center center;
-    border-radius: 15px;
-    border: none;
     background-color: #a7e9af;
 }
 
@@ -80,7 +78,8 @@ a {
     padding: 5px 0 5px 0;
     border-radius: 5px;
     border: none;
-    box-shadow: 1.5px 3px 1.5px #464444;
+    font-size: 0.5rem;
+    box-shadow: 1px 2px 1px #464444;
 }
 
 /* Upload button */
@@ -154,9 +153,14 @@ header {
 
 nav {
     grid-area: nav;
+}
+
+.nav-container-for-fixed-menu {
+    width: 100%;
+    height: 12vh;
+    position: fixed;
     display: grid;
     grid: 1fr / 1fr 2fr 1fr;
-    background: #bbcfff;
     place-items: center center;
 }
 
@@ -175,7 +179,7 @@ nav {
     width: 100%;
     position: fixed;
     z-index: 1;
-    background: rgb(187, 207, 255, 0.95);
+    background: rgb(201, 160, 220, 0.95);
     transition: 0.5s;
     overflow-x: hidden;
     display: grid;
@@ -211,6 +215,7 @@ main {
     display: grid;
     grid: auto / 95vw;
     place-items: center center;
+    margin-top: 10vh;
 }
 
 .main-title {
@@ -221,7 +226,7 @@ main {
     place-self: start center;
     margin-top: 15px;
     padding: 10px 15px 10px 15px;
-    width: 80vw;
+    width: 80%;
     border-radius: 15px;
     background: #a7e9af;
     font-weight: bold;
@@ -237,8 +242,8 @@ main {
 .admin-tab-container {
     place-self: start center;
     display: grid;
-    grid: 1fr / 1fr 1fr;
-    width: 100vw;
+    grid: 1fr / 1fr 1fr 1fr;
+    width: 100%;
 }
 
 .selected {
@@ -246,7 +251,7 @@ main {
 }
 
 .child-container {
-    width: 85vw;
+    width: 100%;
     display: grid;
     grid: 1fr / 3fr 1fr 1fr;
     place-items: center center;
@@ -337,7 +342,7 @@ main {
 }
 
 .post-admin-buttons {
-    width: 95vw;
+    width: 95%;
     display: grid;
     grid: 1fr / 1fr 1fr;
     place-items: center center;
@@ -351,9 +356,43 @@ main {
     background: rgb(70, 68, 68, 0.2);
 }
 
+/* Comments for posts */
+
+.comments-container {
+    display: grid;
+    border: solid 1px rgb(43, 43, 40, 0.15);
+    padding: 15px 5px;
+    margin: 10px 0;
+    border-radius: 5px;
+    font-size: 0.875rem;
+    place-items: center center;
+}
+
+.single-comment-container {
+    display: grid;
+    place-items: center center;
+    grid-template-columns: 2fr 8fr;
+    width: 95%;
+    padding: 15px 5px;
+    margin: 10px 0;
+}
+
+.single-comment-stats {
+    place-self: start center;
+    display: grid;
+}
+.single-comment-container p {
+    place-self: center start;
+    margin-left: 5px;
+    text-align: left;
+}
+
 /* Display posts on family page admin and parents */
 
-
+.single-timeline-post-container{
+    display: grid;
+    place-items: center center;
+}
 
 .timeline-post {
     display: grid;
@@ -361,7 +400,7 @@ main {
     grid-template-rows: auto;
     grid-row-gap: 10px;
     place-items: center center;
-    width: 95vw;
+    width: 95%;
     height: 25vh;
     border: solid 1px rgb(43, 43, 40, 0.3);
     padding: 10px 0;
@@ -409,18 +448,8 @@ main {
 }
 
 .timeline-post-image-full-page {
-    width:10%;
+    width: 10%;
     border-radius: 5px;
-}
-
-.timeline-post-contact {
-    color: #2b2b28;
-    font-size: 0.8rem;
-    border: 1px green solid;
-    border-radius: 15px;
-    padding: 10px;
-    margin-top: 10px;
-    width: 50%;
 }
 
 .timeline-post-full-page-admin-section {
@@ -524,7 +553,6 @@ main {
 
 footer {
     grid-area: footer;
-    background: #bbcfff;
     display: grid;
     place-items: center center;
     margin-top: 10px;
@@ -537,7 +565,7 @@ footer {
 
     body {
         grid: 
-            'header header' 18vh
+            'header header'
             'nav nav' 15vh
             'main main' 1fr
             'footer footer' 12vh
@@ -547,6 +575,10 @@ footer {
 
     nav {
         padding: 2px 0;
+    }
+
+    .nav-container-for-fixed-menu {
+        height: 15vh;
     }
 
     .header-image {
@@ -582,7 +614,7 @@ footer {
 
     body {
         grid: 
-            'header header' 6vh
+            'header header'
             'nav nav' 8vh
             'main main' 1fr
             'footer footer' 5vh
@@ -629,12 +661,8 @@ footer {
         margin-top: 25px;
     }
 
-    .timeline-post {
-        width: 45vw;
-    }
-
-    .post-admin-buttons {
-        width: 45vw;
+    .timeline-post, .post-admin-buttons {
+        width: 100%;
     }
 
     .timeline-post:first-of-type {
@@ -660,7 +688,7 @@ footer {
 
     body {
         grid: 
-            'header header' 10vh
+            'header header'
             'nav nav' 11vh
             'main main' 1fr
             'footer footer' 6vh
@@ -706,12 +734,8 @@ footer {
         grid-column-gap: 2vw;
     }
 
-    .timeline-post {
-        width: 45vw;
-    }
-
-    .post-admin-buttons {
-        width: 45vw;
+    .timeline-post, .post-admin-buttons {
+        width: 100%;
     }
 
     .timeline-post:first-of-type {
@@ -737,7 +761,7 @@ footer {
 
     body {
         grid: 
-            'header header' 10vh
+            'header header'
             'nav nav' 11vh
             'main main' 1fr
             'footer footer' 8vh
@@ -798,12 +822,8 @@ footer {
         grid-column-gap: 2vw;
     }
 
-    .timeline-post {
-        width: 30vw;
-    }
-
-    .post-admin-buttons {
-        width: 30vw;
+    .timeline-post, .post-admin-buttons {
+        width: 100%;
     }
 
     .timeline-post:first-of-type {
@@ -827,7 +847,7 @@ footer {
 
     body {
         grid: 
-            'header header' 10vh
+            'header header'
             'nav nav' 11vh
             'main main' 1fr
             'footer footer' 8vh
@@ -841,11 +861,7 @@ footer {
     }
 
     main {
-        grid-area: main;
-        place-self: center center;
-        display: grid;
         grid: auto / 50vw;
-        place-items: center center;
     }
 
     /* Hide Mobile Menu */
@@ -869,12 +885,13 @@ footer {
     }
 
     .admin-content-container {
+        width: 100%;
         grid: auto / 1fr 1fr;
-        grid-column-gap: 2vw;
+        grid-column-gap: 1vw;
     }
 
     .child-container {
-        width: 43vw;
+        width: 100%;
     }
 
     .add-new-button {
@@ -896,8 +913,8 @@ footer {
         grid-column-gap: 2vw;
     }
 
-    .timeline-post {
-        width: 30vw;
+    .timeline-post, .post-admin-buttons {
+        width: 100%;
     }
 
     .timeline-post:first-of-type {

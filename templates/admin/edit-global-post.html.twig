@@ -1,0 +1,57 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block main %}
+
+    <main>
+
+        <a class="go-back-page" href="{{path('admin_main_page')}}"><i class="fas fa-long-arrow-alt-left"></i> Go Back</a>
+
+        <h2 class="main-title">Edit Global Post</h2>
+
+        {% for message in app.flashes('post_updated') %}
+            <div class="form-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+       {{form_start(form, {'attr': {'novalidate':'novalidate', 'class': 'edit-family-form'}})}}
+       
+                {{form_widget(form.subject, {'attr': {'class': 'edit-family-form-field above-ckeditor'}})}}
+                <div class="form-errors">{{form_errors(form.subject)}}</div>
+
+                {{form_widget(form.content)}}
+                <div class="form-errors">{{form_errors(form.content)}}</div>
+                
+                {% if editGlobalPost.imageFileName == null %} 
+
+                    <div class="upload-btn-wrapper">
+                        <button class="btn">Upload an Image</button>
+                        {{form_widget(form.image, {'label': 'Upload New Image'})}}
+                        <div class="form-errors">{{form_errors(form.image)}}</div>
+                    </div>
+                    <img  class="timeline-post-image" src="" alt="">
+
+                {% else %}
+                    
+                    <div class="current-uploaded-image">
+                        <p>Current Image</p>
+                        <img  class="timeline-post-image" src="{{asset('assets/img/posts/' ~ editPost.imageFileName)|imagine_filter('downscale_filter')}}" alt="">
+                    </div>
+
+                    <div class="upload-btn-wrapper">
+                        <button class="btn">Edit Image</button>
+                        {{form_widget(form.image, {'label': 'Upload a different image'})}}
+                        <div class="form-errors">{{form_errors(form.image)}}</div>
+                    </div>
+                    
+                {% endif %}
+
+                <div class="form-errors">{{form_errors(form.image)}}</div>
+                
+                {{form_widget(form.Update, {'attr': {'class': 'submit-button'}})}}
+
+        {{form_end(form)}}
+
+    </main>
+
+{% endblock %}

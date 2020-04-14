@@ -9,10 +9,10 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\PostRepository")
- * @ORM\Table(name="posts")
+ * @ORM\Entity(repositoryClass="App\Repository\GlobalPostRepository")
+ * @ORM\Table(name="global_posts")
  */
-class Post
+class GlobalPost
 {
     /**
      * @ORM\Id()
@@ -39,12 +39,6 @@ class Post
     private $date;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Child", inversedBy="posts")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $child;
-
-    /**
      * @ORM\Column(type="string", nullable=true)
      */
     private $imageFileName;
@@ -55,13 +49,13 @@ class Post
     private $Time;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="post_id")
+     * @ORM\OneToMany(targetEntity="App\Entity\GlobalPostComment", mappedBy="GlobalPost")
      */
-    private $comments;
+    private $globalPostComments;
 
     public function __construct()
     {
-        $this->comments = new ArrayCollection();
+        $this->globalPostComments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -105,18 +99,6 @@ class Post
         return $this;
     }
 
-    public function getChild(): ?Child
-    {
-        return $this->child;
-    }
-
-    public function setChild(?Child $child): self
-    {
-        $this->child = $child;
-
-        return $this;
-    }
-
     public function getImageFileName(): ?string
     {
         return $this->imageFileName;
@@ -142,30 +124,30 @@ class Post
     }
 
     /**
-     * @return Collection|Comment[]
+     * @return Collection|GlobalPostComment[]
      */
-    public function getComments(): Collection
+    public function getGlobalPostComments(): Collection
     {
-        return $this->comments;
+        return $this->globalPostComments;
     }
 
-    public function addComment(Comment $comment): self
+    public function addGlobalPostComment(GlobalPostComment $globalPostComment): self
     {
-        if (!$this->comments->contains($comment)) {
-            $this->comments[] = $comment;
-            $comment->setPostId($this);
+        if (!$this->globalPostComments->contains($globalPostComment)) {
+            $this->globalPostComments[] = $globalPostComment;
+            $globalPostComment->setGlobalPost($this);
         }
 
         return $this;
     }
 
-    public function removeComment(Comment $comment): self
+    public function removeGlobalPostComment(GlobalPostComment $globalPostComment): self
     {
-        if ($this->comments->contains($comment)) {
-            $this->comments->removeElement($comment);
+        if ($this->globalPostComments->contains($globalPostComment)) {
+            $this->globalPostComments->removeElement($globalPostComment);
             // set the owning side to null (unless already changed)
-            if ($comment->getPostId() === $this) {
-                $comment->setPostId(null);
+            if ($globalPostComment->getGlobalPost() === $this) {
+                $globalPostComment->setGlobalPost(null);
             }
         }
 
